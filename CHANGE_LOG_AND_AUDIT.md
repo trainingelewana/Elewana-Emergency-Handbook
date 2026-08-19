@@ -694,3 +694,36 @@ Immediately after delivery, the user reported the Elewana logo had a black backg
 **Verification:** logo now renders with a clean transparent background, matching the role cards and every other document in the set. Confirmed via close-up render of the logo area, full-page render of page 2, and a check that page 1 (untouched throughout) remains correct. Field/page counts re-confirmed unchanged: 2 pages, 94 fields, `qpdf --check` clean.
 
 This is now the second time in this session a redaction/extraction boundary or asset-handling mistake was caught by direct visual re-inspection rather than being missed — both `fnb-stock-sheet.pdf` (§P.3) and this logo issue were caught before or immediately after delivery, not left undetected. Noting this pattern transparently: image/asset extraction steps in this sandbox (without the original render pipeline) carry real risk of this class of error, and each one has required a dedicated verification pass to catch.
+
+---
+
+# Section R — Role cards rebuilt as HTML and rendered to real PDFs
+
+Following a request to make the 7 ICS Quick Action Role Cards visually consistent with the rest of the document family (not just functionally correct), they were rebuilt from scratch as proper HTML sections inside `elewana-forms-pack.html`, using the exact CSS design system already established there (Fraunces/Inter fonts, cream/gold/ink palette, `.box`, `.pg-head`, tick-list conventions) rather than the earlier `reportlab`-drawn PDFs.
+
+## R.1 New HTML sections
+
+All 7 cards added as `<section class="page" id="role-card-*">` blocks, inserted after `#ckl-foodborne` (A46) and before the closing `</doc-page>` tag. Added to the index/table of contents with 7 new entries (no A-code, consistent with their status as new uncontrolled quick-reference material). Wired into the existing `downloadForm()`/`groupFor()` print JavaScript with zero code changes needed — the generic fallback (`return [id]`) already handles standalone single pages correctly.
+
+Deliberate readability choices beyond matching the palette:
+- Real ☐ tick-list bullets (`ul.tick`), matching every checklist elsewhere in the pack, replacing the plain "•" bullets the `reportlab` version used
+- Life-safety exception callouts get a quiet boxed treatment — small-caps label, italic body — so they read as a distinct aside rather than blending into the bullet stream
+- "Do Not" section heading uses ink rather than gold-deep, a subtle cue distinguishing constraints from actions
+- Every card closes on a "Remember" box using the same cream-deep/gold treatment already established for "Operating rule" callouts (e.g. `radio-codes.pdf`) — gives the takeaway line real visual weight
+
+## R.2 Rendering: `wkhtmltopdf` substituted for the missing Playwright pipeline
+
+This sandbox still cannot download a Playwright/Chromium browser (see §O.1). `wkhtmltopdf` (WebKit-based, pre-installed in this environment) was used as a substitute renderer to produce actual PDF output from the real HTML/CSS — not a perfect match for the project's native Playwright pipeline, but a genuine CSS renderer rather than the cruder `reportlab` canvas-drawing approach used previously.
+
+**Two real rendering issues were found and fixed before finalizing:**
+
+1. **CSS Grid unsupported.** The shared `.grid2`/`.grid3` utility classes (used **77 times** across the whole forms pack, not just the role cards) used `display:grid`, which this WebKit engine does not render — content collapsed to a single stacked column and overflowed onto a second page. Fixed by converting `.grid2`/`.grid3` to `display:flex` with `flex:1` children — visually identical in any modern browser or Playwright, and now also compatible with this renderer. This was a **shared stylesheet fix**, so it benefits every other page using these classes, not just the role cards, and doesn't change how the site will look once rendered through the intended pipeline.
+2. **Google Fonts blocked.** The `@import` for Fraunces/Inter fails in this sandbox's restricted network environment (`fonts.googleapis.com` is not on the allow-list). The stylesheet's own fallback stack (`Georgia, serif` / `system-ui, sans-serif`) takes over automatically — no error, just a different but still clean and professional typeface. **This is a disclosed, sandbox-specific limitation**: once rendered through a normal internet-connected environment (or Playwright with the fonts cached), the cards will pick up the correct Fraunces/Inter typefaces automatically, with no HTML/CSS changes required.
+
+## R.3 Verification
+
+All 7 re-rendered PDFs confirmed: exactly 1 page each (was 2 before the Grid fix), `qpdf --check` clean on all 7, visually inspected at full resolution for all 7 — two-column layout correct, checkboxes crisp, "Remember" box styling correct, no text clipping or overlap. Installed into `forms/`, replacing the earlier `reportlab`-built versions. Total PDF count in `forms/` remains 54 (no filename changes, so all existing links in `index.html` and the download/print JavaScript continue to work without modification).
+
+## R.4 Known limitation carried forward
+
+Typography is Georgia/system-sans rather than Fraunces/Inter, due to the sandbox's network restrictions, not a defect in the HTML/CSS itself. If this matters before print/lamination, re-rendering in an environment with either Playwright access or unrestricted internet access will pick up the correct fonts with no source changes needed.
