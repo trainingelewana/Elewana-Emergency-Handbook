@@ -952,3 +952,44 @@ The reported "overrunning" was confirmed via screenshot: the tile label "Priorit
 **Fix:** shortened the label per the user's direction — removed the "(A4-TZ)"/"(A4-KE)" suffix entirely and replaced "Tanzania"/"Kenya" with "TZ"/"KE". New labels: "Priority Contact Card — TZ" and "Priority Contact Card — KE", applied identically everywhere the two-tile pattern exists (19 instances each, matching the full rollout from §V.2).
 
 **Verified:** exact string replacement — 19/19 old-pattern instances replaced with the new text on both TZ and KE, zero old-pattern remnants, `href` targets (`forms/contact-card.pdf` and `forms/contact-card-ke.pdf`) confirmed unaffected by the text-only change.
+
+---
+
+# Section BB — Serious regression found and fixed: grid2/grid3 field collision on the live site
+
+The user sent screenshots of the actual live site (`trainingelewana.github.io`, real Chrome browser) showing severe field-label collisions on `vehicle-report.pdf` ("Vehicle Incident Report Form"), `incident-report.pdf`, and reported similar issues on `breakdown-report.pdf` and `symptom-log.pdf`. This was a genuine, deployed bug — not a testing-tool artifact.
+
+## BB.1 Root cause: a regression introduced earlier in this session
+
+§R.2 converted the shared `.grid2`/`.grid3` utility classes from `display:grid` to `display:flex` to solve a *different* problem — `wkhtmltopdf`'s inability to render CSS Grid, discovered while building the role cards. That fix was correct for its stated purpose (verified on the 7 role cards, which each use exactly 2 items in a `.grid2`) but incomplete: plain `display:flex` without `flex-wrap` puts **all** children in a single row, whereas the original `display:grid;grid-template-columns:1fr 1fr` automatically wraps extra items onto new rows. Any section with more than 2 (`.grid2`) or 3 (`.grid3`) field items — which the role cards never had — would have every item crammed into one row, each getting a sliver of width, producing exactly the severe text collision shown in the screenshots. This was **not caught at the time** because verification for that fix was scoped only to the role cards, not the other 77 usages of these shared classes across the document.
+
+## BB.2 Fix
+
+```css
+.grid2{display:flex;flex-wrap:wrap;margin-right:-.4in;}
+.grid2>div{flex:0 0 calc(50% - .4in);margin-right:.4in;margin-bottom:.12in;min-width:0;}
+.grid3{display:flex;flex-wrap:wrap;margin-right:-.3in;}
+.grid3>div{flex:0 0 calc(33.333% - .3in);margin-right:.3in;margin-bottom:.12in;min-width:0;}
+```
+
+This restores true multi-row, fixed-column wrapping (matching the original CSS Grid behaviour) using the same `wkhtmltopdf`-safe technique (explicit `flex-basis` + margin instead of the unsupported `gap` property) established in §R.2 and §S — this is not a new mechanism, just correctly extended to handle wrapping.
+
+## BB.3 Scope of actual damage — verified, not assumed
+
+Scanned every `.grid2`/`.grid3` usage across all 72 sections (proper HTML parsing, not regex) for cases where the item count exceeds the column count — these are the only cases that could have been visually broken by the bug (2-item `.grid2`s and 3-item `.grid3`s were never affected, since those already fit in one row regardless of wrapping).
+
+**Genuinely broken, now fixed and re-verified:**
+- `vehicle-report` — 12 items in one `.grid2` (the worst case; matches the user's screenshot exactly)
+- `vehicle-report-2` — 4 items in one `.grid2`
+- `incident-report` — 5 items in one `.grid2` (two separate instances on the same page)
+- `medical-report` — 6 items in one `.grid3`
+
+**Checked and confirmed NOT actually broken by this bug**, despite being mentioned by the user: `breakdown-report` (uses two separate 3-item `.grid3` blocks — each already fit one row correctly) and `symptom-log` (exactly 3 items in one `.grid3`, at the column limit, not exceeding it). Both were re-rendered and visually confirmed clean before and conceptually unaffected by this specific bug — their inclusion in the user's report is understandable given visual proximity to the genuinely broken pages, but the fix here doesn't change their layout because they were never in the broken state.
+
+## BB.4 Verification
+
+All 4 genuinely-affected sections re-rendered after the fix and visually confirmed: fields now wrap correctly into proper 2- or 3-column rows with no overlap or collision. Re-tested a 2-item `.grid2` (the Incident Commander role card) to confirm zero regression on the case the original §R.2 fix was built for — confirmed identical, unaffected layout. Full-document structural check: HTML parses cleanly, 72 sections, 40 `.grid2` + 37 `.grid3` usages total, all using the corrected shared rule.
+
+## BB.5 Accountability note
+
+This was a real miss: a shared, document-wide CSS change was verified against only the specific case it was built to fix (2-item grids) rather than swept across all usages of the class before being called complete. The lesson carried forward: any edit to a shared/utility CSS rule needs to be checked against the full range of how that class is actually used in the document, not just the triggering example — this is now the second time in this session a shared-class change needed a follow-up fix after being under-verified (see also §Y.3's disclosed uncertainty about the `.line` fix, which at least was flagged as unverified at the time rather than asserted as complete).
