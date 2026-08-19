@@ -892,3 +892,53 @@ While checking the above, found the actual root cause of most of the box-height/
 **Fix:** added a fallback `.line{border-bottom:1px solid var(--ink-soft);min-height:.32in;margin-bottom:.06in;}` rule to the shared stylesheet. Verified this is safely scoped: `.field .line` (2-class specificity) still takes precedence wherever it already applies, so all 257 other `.line` divs elsewhere in the document (already correctly styled via their `.field` ancestor) are unaffected — the new rule only takes effect for the 12 divs (2 lines × 6 boxes) that previously had no matching rule at all.
 
 **Significance:** if the build pipeline is ever restored and these PDFs are regenerated from this HTML source, this fix means the same box-height/overlap defects should not reappear — the root cause is now addressed in the source, not just patched in the output files. This could not be verified by an actual re-render in this sandbox (no Playwright access), so it is a well-reasoned but not empirically confirmed fix.
+
+---
+
+# Section Z — Six Final Corrections (Dashboard Alignment Instructions)
+
+Executed against `Claude_Final_6_Corrections_Dashboard_Alignment_Instructions.docx`. Each of the 6 items was independently verified against the current live files before any edit was made — several were found already satisfied by earlier work in this session and correctly left untouched, rather than assumed.
+
+## Z.1 — Role cards: no A-code (Correction #1)
+
+**Status: already satisfied, no changes needed.** Searched for "A5.1"–"A5.7" — zero genuine matches (4 false-positive hits were SVG path coordinates, e.g. "A5.5 5.5..."). "Logistic Commander" (incorrect singular) — zero matches anywhere. The Forms Pack index already correctly shows "—" / "no A-code" for all 7 role cards.
+
+## Z.2 — Phase 3 external agencies vs. media authority (Correction #2)
+
+**Status: fixed.** Found the exact flagged sentence in `index.html` (General Emergency Protocols → Contain the Incident). Replaced with the specified wording separating operational external-agency contact (IC) from media/public enquiries (Head Office spokesperson, Section 7.4), while preserving the Section 7.2 life-safety exception reference. Confirmed Section 7.4 already correctly states media contact is spokesperson-only ("only a Head Office–appointed spokesperson speaks to media or press").
+
+## Z.3 — External Coordination life-safety exception (Correction #3)
+
+**Status: already satisfied, no changes needed.** The exact sentence flagged in the instructions as needing correction was not found — the live site's actual current wording (in the "Single command authority" callout) already correctly separates the normal command chain from the life-safety exception, in substance matching the instruction's desired replacement. This was corrected during earlier work in this session, prior to receiving these instructions.
+
+## Z.4 — Emergency Coordinator role boundary (Correction #4)
+
+**Status: fixed.** The EC's role-summary row in the Roles & Responsibilities table did not use the flagged phrase ("all logistical and resource support") verbatim, but was incomplete relative to the desired wording and didn't explicitly state the LC boundary. Replaced with the exact specified text, which also explicitly states "Resource and equipment logistics remain under the Logistics Commander (LC)." No duplicate EC summary found elsewhere requiring the same fix.
+
+## Z.5 — Drill frequencies vs. Section 11.2 (Correction #5)
+
+**Status: one real discrepancy found and fixed.** No blanket "quarterly for every drill type" wording found anywhere. Individually verified: Fire drill frequency already correctly stated as quarterly (two places). **Armed Threat/Lockdown drill frequency was found stated as "at least once a year," contradicting the controlled twice-per-year requirement — fixed to "at least twice a year."** A separate monthly choking/cardiac/snakebite skills-practice item was identified and deliberately left unchanged — it is a distinct first-aid skills drill, not the same category as "Medical Evacuation drill," and changing it without a documented Section 11.2 reference to check against would risk introducing an incorrect assumption.
+
+## Z.6 — Document-control consistency (Correction #6)
+
+**Status: already satisfied, no changes needed.** "Director of Hospitality and Operations" — zero matches in either file. "Jarryd King" already correctly shows "Director of Operations" in both instances found. No inappropriate issue/review date exists anywhere on the live site (the site does not expose a document-level approval-status field at all, so nothing needed removing or correcting). "Page 1 of 1" only appears as legitimate internal PDF page footers, never as handbook-level metadata.
+
+## Z.7 — Mandatory Final QA (all items completed)
+
+- **Navigation:** all 21 `showPage()` call targets verified to resolve to a matching `<template id="tpl-X">` — confirmed via the actual dynamic-mount architecture (not a static per-page `id`, which was an early false alarm in this verification corrected before reporting).
+- **Role cards:** all 7 PDF files confirmed present on disk and correctly linked.
+- **Forms Pack A2–A46:** full bidirectional link audit — all 54 forms referenced resolve to files on disk, all 54 files on disk are referenced; zero orphans in either direction.
+- **Contradiction check:** re-read the corrected Phase 3 wording, the Section 7.4 media rule, and the life-safety exception together — consistent, no contradiction.
+- **Drill frequencies:** Fire (quarterly) and Armed Threat (now twice/year) confirmed; no Medical Evacuation-specific frequency currently stated on the live site to check against.
+- **Protected content confirmed unaltered:** 16:00 medevac cutoff still exactly 3 occurrences (unchanged); no edits made anywhere near clinical content, night-airstrip-lighting instructions, contact numbers, scenario numbering, radio codes, or the A2–A46 controlled mapping — only the 3 specific lines described above were touched.
+- **Final repository-wide sweep for all superseded phrases:** zero hits across both files.
+
+## Z.8 — Files changed / exact corrections made (summary)
+
+| # | File | Change |
+|---|---|---|
+| 2 | `index.html` | Phase 3 "Contain the Incident" — replaced 1 sentence separating operational vs. media contact authority |
+| 4 | `index.html` | Emergency Coordinator role-summary row — replaced description to clarify LC boundary |
+| 5 | `index.html` | Armed Threat/Lockdown drill frequency — "once a year" → "twice a year" |
+
+Three total line-level edits, all in `index.html`. `elewana-forms-pack.html` required no changes — every item checked against it was already correct.
