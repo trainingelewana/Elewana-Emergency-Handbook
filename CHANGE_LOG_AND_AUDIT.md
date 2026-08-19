@@ -942,3 +942,13 @@ Executed against `Claude_Final_6_Corrections_Dashboard_Alignment_Instructions.do
 | 5 | `index.html` | Armed Threat/Lockdown drill frequency — "once a year" → "twice a year" |
 
 Three total line-level edits, all in `index.html`. `elewana-forms-pack.html` required no changes — every item checked against it was already correct.
+
+---
+
+# Section AA — Priority Contact Card tile text: overrun confirmed and fixed
+
+The reported "overrunning" was confirmed via screenshot: the tile label "Priority Contact Card — Tanzania (A4-TZ)" was too long for the tile width, wrapping awkwardly across 4 lines and breaking mid-term. This was the actual instance of the pagination/overflow concern raised earlier in this session — not a PDF-pagination issue, but a UI tile text-overflow issue on the live dashboard.
+
+**Fix:** shortened the label per the user's direction — removed the "(A4-TZ)"/"(A4-KE)" suffix entirely and replaced "Tanzania"/"Kenya" with "TZ"/"KE". New labels: "Priority Contact Card — TZ" and "Priority Contact Card — KE", applied identically everywhere the two-tile pattern exists (19 instances each, matching the full rollout from §V.2).
+
+**Verified:** exact string replacement — 19/19 old-pattern instances replaced with the new text on both TZ and KE, zero old-pattern remnants, `href` targets (`forms/contact-card.pdf` and `forms/contact-card-ke.pdf`) confirmed unaffected by the text-only change.
