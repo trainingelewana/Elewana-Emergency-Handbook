@@ -727,3 +727,110 @@ All 7 re-rendered PDFs confirmed: exactly 1 page each (was 2 before the Grid fix
 ## R.4 Known limitation carried forward
 
 Typography is Georgia/system-sans rather than Fraunces/Inter, due to the sandbox's network restrictions, not a defect in the HTML/CSS itself. If this matters before print/lamination, re-rendering in an environment with either Playwright access or unrestricted internet access will pick up the correct fonts with no source changes needed.
+
+---
+
+# Section S — Column spacing bug found and fixed (immediate follow-up)
+
+Immediately after delivery, the user reported the two-column layout on the role cards looked cramped, with headings/bullets running close together at the column boundary. Screenshot review confirmed this.
+
+**Root cause:** the CSS `gap` property, used on the `.grid2`/`.grid3` flex containers to space the two/three columns apart, is silently unsupported by the `wkhtmltopdf` WebKit engine (confirmed via isolated test: a 40px `gap` rendered as zero visible space). This wasn't caught in §R's verification because the columns still looked plausibly separated at a glance in the earlier renders — the bug only became obvious once pointed out directly, and testing in isolation confirmed it decisively.
+
+**Fix:** replaced `gap` with `margin-right` on all but the last flex child — a spacing method with no such compatibility issue, confirmed via the same isolated test. Widened the gap at the same time, per the user's request, from the original `.18in` to `.4in` (`.grid2`) and `.3in` (`.grid3`).
+
+**Scope note:** `.grid2`/`.grid3` are shared utility classes used **77 times** across the whole forms pack (§R.2), not just the 7 role cards. This fix corrects the same latent zero-gap bug everywhere those classes are used, not only on the role cards — a genuine improvement to the rest of the pack's `wkhtmltopdf` rendering, though only the role cards have been re-rendered and visually re-verified in this pass; the other 70 usages have not been individually re-rendered to confirm the visual improvement, only the underlying CSS mechanism.
+
+**Verification:** all 7 role cards re-rendered, confirmed still exactly 1 page each (increasing the gap could plausibly have pushed dense content to a 2nd page — checked and did not), `qpdf --check` clean, visually inspected (Incident Commander — the densest card — and Medic, both confirmed clean with generous, non-overlapping column spacing). Installed into `forms/`, replacing the §R versions.
+
+---
+
+# Section T — `trauma-obs.pdf` genuinely re-fixed (user-flagged regression)
+
+The user re-uploaded `trauma-obs.pdf` and reported it was "not correct." Direct inspection confirmed this — the §O.4 fix from earlier in this session left real, visible defects that had been under-verified at the time.
+
+## T.1 Root causes found
+
+1. **Wrong heading font/size on "Drug Allergies."** The §O.4 fix restored this heading (after an accidental redaction) using `fontsize=10.5, fontname="tibo"` (Times-Bold) — but the document's actual heading convention for this element is `LiberationSerif-Bold` at `7.6pt` (confirmed by checking the untouched, original "On Medication" and "Control of Bleeding" headings nearby). The oversized heading ate into the already-tight box, colliding with a field squeezed into a 5pt-tall gap directly above it — visible as a small floating black sliver sitting right on the heading.
+2. **Boxes still fundamentally too short for their content**, a problem disclosed as a known limitation in §O.4 but not actually resolved — fields continued to be squeezed into gaps of 5–15pt rather than being given room to sit cleanly.
+3. **A secondary, smaller version of the same pattern on page 2**: the "Mechanism of Injury" second line (`trauma-obs__text__085`) was an oddly narrow, orphaned fragment floating in the gap between the "Mechanism of Injury" and "Injury Found" boxes — a leftover from the same style of tight squeeze-fit.
+
+## T.2 Fix this time: rebuilt properly rather than re-patched
+
+Rather than nudge coordinates again in an already-too-tight space, the "On Medication" and "Drug Allergies" boxes on page 1 were rebuilt from a clean slate:
+- Full redaction of the problem area back to page background
+- Both box borders **redrawn taller** (from ~27.75pt to ~51pt each), using free space confirmed available below (this part of the page has ~250pt of blank space beneath it — verified before use, not assumed)
+- Both headings redrawn using the **correct** original style (`LiberationSerif-Bold`, 7.6pt, matching "On Medication" and "Control of Bleeding")
+- All 4 fields (2 lines × 2 boxes) repositioned to sit cleanly inside the new, properly-sized boxes with real padding — no more sub-15pt gaps
+
+On page 2, the orphaned `text__085` fragment was widened to match its sibling lines' full-width style and positioned cleanly below line 1, removing the floating-fragment appearance. The pre-existing box-border overflow on page 2 (fields sitting slightly outside their thin decorative borders) was **not** further restructured this pass — fully resolving it would require pushing the Vital Signs table and everything below it down the page, a much larger, higher-risk change to a page that is otherwise fully legible with no hidden or colliding text. This is a disclosed, deliberate scope decision, not an oversight.
+
+## T.3 Verification
+
+Page/field count: **2 pages, 110/110 fields** preserved throughout (confirmed before and after). `qpdf --check`: clean. Visually re-inspected at full resolution on both pages after the fix — no hidden, garbled, or overlapping text remaining; both rebuilt boxes on page 1 show correctly sized borders with legible headings and clean fields. Installed into `forms/trauma-obs.pdf`, replacing the §O.4 version.
+
+## T.4 Accountability note
+
+This is a direct correction of an earlier claim. §O.4 described this fix as verified and disclosed only a cosmetic border-overflow limitation — that description understated the actual state of the file, which had a genuine, visible defect (the floating fragment colliding with "Drug Allergies") that should have been caught by closer visual re-inspection at the time. Flagging this plainly rather than only fixing it quietly.
+
+---
+
+# Section U — `trauma-obs.pdf` rebuilt from a different (older) source file at user's request
+
+The user indicated the file they'd been sending was an older version they meant to use as the base going forward, and asked for it to be fixed instead of using the previously-repaired version (§O.4, §T). This section documents that as a distinct rebuild, not a continuation of the earlier fix.
+
+## U.1 Initial concern raised and confirmed
+
+Before making changes, the older file was inspected and found to differ from the previously-corrected version in two material ways:
+- **Field count: 106 vs. 110**, with a different internal naming scheme for checkboxes (`chk__077`–`082` vs. the other file's `chk__001`–`006`) — confirming this is a genuinely different source export, not a variant of the same file.
+- **Stale section code**: "A42 · Section 8.2.4" instead of "A42 · Section 8.1 / Medical Support," which is used consistently everywhere else across `index.html` and `elewana-forms-pack.html` following the v7 amendment sync (§N). This was flagged to the user directly before proceeding; they confirmed they wanted this older file fixed anyway.
+
+## U.2 Root cause — different from, and simpler than, §O.4's diagnosis
+
+An initial coordinate check appeared to show fields scattered in unrelated positions across the page — but this was a **false read caused by mixing coordinate systems** (raw PDF bottom-up `/Rect` values compared against normalized top-down positions). Once corrected to use consistent, normalized coordinates throughout, the actual defect was clear and consistent: every multi-line field in this file (On Medication, Drug Allergies, Mechanism of Injury, Injury Found, Signs & Symptoms, Notes) had **all of its intended lines collapsed onto the exact same ~4pt-tall rect, duplicated once per intended line** — e.g. "Drug Allergies" needed 2 fields; both existed but sat exactly on top of each other, 4pt tall, effectively invisible. This is a distinct, more mechanical defect than the "coordinate drift" pattern diagnosed in §O.4's file, and was more straightforward to fix once correctly identified: every affected box's fields were spread into their intended number of properly-spaced, properly-sized lines rather than repositioned individually.
+
+This file's **static content was otherwise cleaner** than the previously-corrected version — correct heading fonts/sizes throughout (no font-mismatch issue), and correct Wound/Burn legend symbols (○/▦) rather than the dot-substitutes used in §O.4's restoration. Page 2's larger boxes (Signs & Symptoms, at 155pt tall) had ample room and needed no cramped tight-fitting — only the collapsed-duplicate fields needed correcting.
+
+## U.3 Fixes applied
+
+- **Page 1**: On Medication and Drug Allergies boxes rebuilt taller (matching the §T approach — redact, redraw border, redraw heading at the correct native font/size for this file, reposition 2 properly-spaced fields each)
+- **Page 2**: Mechanism of Injury (2 lines), Injury Found (2 lines), Signs & Symptoms (3 lines, generously spaced in its already-tall box), and Notes (2 lines) all had their collapsed-duplicate fields separated into correctly spaced, correctly sized lines. The single Burn Surface Area field was resized from 4pt to a usable height.
+- **Section code corrected** on both pages: "A42 · Section 8.2.4" → "A42 · Section 8.1 / Medical Support," matching the rest of the handbook.
+
+## U.4 Verification
+
+**106/106 fields preserved** (confirmed before and after — no fields lost, no new duplicates introduced). `qpdf --check`: clean on the final file. Visually inspected at full resolution on both pages after all fixes — no hidden, collapsed, duplicated, or garbled fields remaining; both pages fully legible with every field visible and appropriately sized. Installed as `forms/trauma-obs.pdf`, replacing the §T version.
+
+## U.5 Known residual, disclosed
+
+The page-1 title ("Trauma & Vitals — 15-Minute Observation Chart") wraps after "15-" rather than after "Observation," a cosmetically awkward but non-functional line-break baked into this file's original static text layout. Not fixed — doing so would require adjusting the title's text box width or font size, which risks disturbing other static positioning on the page for a purely cosmetic issue. Flagged rather than silently left.
+
+## U.6 Note on field-count discrepancy
+
+This file's field count (106) differs from the previously-delivered version's (110) — this is expected and not a regression: the two are genuinely different source exports of the same form with different internal structures, not two states of the same file. Both are now internally complete and correctly laid out for their own structure.
+
+---
+
+# Section V — Four user-reported issues (this pass)
+
+## V.1 F&B Stock Sheet "scrambled/black blocks"
+
+Root cause: a coordinate error from an earlier fix (§P.3) had placed the "Reported to Head Office" field in column 3's territory, causing it to physically overlap "Next Count Due." Overlapping white-filled/black-bordered field boxes read as dark, merged shapes at a glance — that's what looked like "black blocks." Fixed by repositioning both fields to their correct, non-overlapping columns. Verified with two rendering engines; 55/55 fields preserved.
+
+## V.2 Priority Contact Card — Kenya not linked
+
+18 instances across `index.html` linked only to `contact-card.pdf` (Tanzania). Replicated the correct two-tile pattern (found already correct in one place in the document) to all 18 locations. Both Tanzania and Kenya cards now link from every scenario page.
+
+## V.3 Checkbox text losing its hanging indent on wrap
+
+A systematic bug: wrapped continuation lines in tick-list confirmations fell back to the checkbox's own x-position instead of staying indented under the first line. Built a general detector/fixer, validated against Wildlife's correct rendering as a reference. Iterated twice to eliminate false positives (bold/serif header text, e.g. "Confirmations," and adjacent same-row labels like "OC" next to its own checkbox) and to handle pages with multiple side-by-side checkbox columns (`kitchen-batch-log.pdf`, `sitrep.pdf`).
+
+**Fixed:** `ckl-medical.pdf`, `ckl-weather.pdf`, `ckl-missing.pdf`, `ckl-aquatic.pdf`, `predeparture-checklist.pdf`, `kitchen-batch-log.pdf`, `snakebite-guide.pdf` — 7 files, 55 spans total.
+**Confirmed already correct, no change made:** `ckl-fire.pdf`, `ckl-wildlife.pdf` (the reference), `nonphone-threat-guide.pdf`, `sitrep.pdf`, and all 7 role cards (initial automated scan flagged these as candidates; manual inspection confirmed each was a false positive — coincidental x-position matches, not genuine bugs).
+
+A secondary bug was caught mid-fix: the first fix pass rendered inserted em-dashes ("—") as a substitute glyph ("·") due to the base-14 Helvetica font's handling in this rendering path — same class of issue seen earlier in this session. Caught via visual re-inspection before finalizing, fixed by sanitizing em-dashes to plain hyphens in the fix script, and the one affected file (`kitchen-batch-log.pdf`) was rebuilt clean.
+
+All 7 fixed files verified: field counts preserved, `qpdf --check` clean, zero overlapping widgets (systematic overlap-detector check run across all).
+
+## V.4 `trauma-obs.pdf` "black blocks" — unresolved, could not reproduce
+
+Investigated thoroughly: rendered with two different engines (PyMuPDF, poppler), inspected raw appearance-stream data for every field touched in this session (all correct — proper white-fill/black-border draw commands), and ran the systematic overlap-detector across the whole file (clean). No evidence of the reported defect found by any available method in this environment. Flagged as needing a screenshot from the user to proceed further — this is a case where the reported symptom could not be independently confirmed, so no speculative fix was applied.
