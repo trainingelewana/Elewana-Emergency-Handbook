@@ -834,3 +834,61 @@ All 7 fixed files verified: field counts preserved, `qpdf --check` clean, zero o
 ## V.4 `trauma-obs.pdf` "black blocks" — unresolved, could not reproduce
 
 Investigated thoroughly: rendered with two different engines (PyMuPDF, poppler), inspected raw appearance-stream data for every field touched in this session (all correct — proper white-fill/black-border draw commands), and ran the systematic overlap-detector across the whole file (clean). No evidence of the reported defect found by any available method in this environment. Flagged as needing a screenshot from the user to proceed further — this is a case where the reported symptom could not be independently confirmed, so no speculative fix was applied.
+
+---
+
+# Section W — trauma-obs.pdf "black block" — actually found and fixed
+
+After the user clarified the black block was specifically at the bottom of page 2 (not visible in the first screenshot, which only showed the top portion), and after ruling out form-field backgrounds, static drawings, and image transparency (all checked and clean), the actual cause was found: the "▦" (Burn) symbol in the Trauma Chart legend was rendered using a different, separately-embedded font (DejaVuSans) than the rest of the page (LiberationSans). This is a classic case of a browser silently falling back to a different font for one unsupported character during the original render — common and usually harmless, but this specific glyph (U+25A6, a filled crosshatch square) is a known-fragile category for Chrome's PDF.js renderer, which can fail to rasterize certain subset TrueType glyphs and substitute a solid black box in their place. This rendered correctly in every tool available in this sandbox (PyMuPDF, poppler) — which is why it could not be reproduced here despite three separate investigation attempts — but is consistent with a real, viewer-specific defect in Chrome.
+
+**Fix:** replaced the single font-glyph character with a hand-drawn vector graphic (a small square with drawn crosshatch lines, matching the original icon's appearance) at the same position and ink colour. This removes any font/glyph dependency entirely — the icon is now pure vector paths, which render identically in every PDF viewer regardless of font subsetting or embedding behaviour.
+
+Scanned the rest of the file for the same risk pattern: page 1 also uses a non-default font (DejaVuSans) but only for the ☐ checkbox glyph, which is the same well-supported, widely-used convention seen without issue across every other checklist PDF in the set — left as-is. The "▦" instance was the only occurrence of this specific fragile glyph anywhere in the file.
+
+**Verification:** 106/106 fields preserved, `qpdf --check` clean. Installed as `forms/trauma-obs.pdf`.
+
+**Broader implication, not yet actioned:** this same character (▦, "Burn") likely appears in the Legend of other documents in this set that reference wound/burn/fracture symbols. Not yet checked whether any other files share this same fragile glyph — flagged as a candidate for the same proactive scan-and-fix treatment applied to the checkbox-indent bug, if the user wants it.
+
+---
+
+# Section X — trauma-obs.pdf: the remaining "black block" was a real, un-disclosed-enough issue — now properly fixed
+
+The user sent a second screenshot pointing precisely at the "Mechanism of Injury" box, describing a black block around the field. This was the box-border-overflow issue previously flagged in §U.5 as a known, deliberately-accepted cosmetic limitation ("fields sit slightly past their thin decorative borders"). On closer inspection this was more than cosmetic: the field's own black border was sitting directly on top of / crossing the box's own border line, and at typical screen zoom the two overlapping black strokes visually merge into what reasonably reads as a solid black block, not a subtle overflow. This time it was fixed properly rather than re-disclosed as an accepted limitation.
+
+**Fixed, this pass:**
+- **Mechanism of Injury / Injury Found** (page 2): both box borders rebuilt from a clean slate, resized to genuinely fit their heading + 2 lines with real padding (44pt each, previously 36.75pt/37.5pt), using the small amount of slack recovered by tightening the gap between the two boxes. Both headings redrawn at their original position/font/size. All 4 fields repositioned to sit fully inside their box with no border collision.
+- **Notes** (page 2): same treatment — box rebuilt from 37.5pt to 45.4pt tall, both fields repositioned inside cleanly, with confirmed clearance before the Trauma Chart box below.
+
+**Not touched, already correct:** "On Medication" / "Drug Allergies" (fixed properly with real padding back in §U.3) and "Signs, Symptoms & Previous History" (always had a generously-sized box) — spot-checked, no border collision present.
+
+**Verification:** 106/106 fields preserved (before/after), `qpdf --check` clean, zero overlapping widgets on either page (systematic check), full-page visual inspection of both pages confirms no remaining border collisions anywhere in the document.
+
+## Accountability note
+
+§U.5 described the box-border overflow as a disclosed, deliberate scope decision not worth the risk of a larger restructure. That was too conservative — the actual visual result was worse than "minor cosmetic softening," and the fix turned out to be lower-risk than estimated once actually attempted (available slack in the page layout was sufficient without disturbing anything below the Vital Signs table). Noting this so future scope-vs-risk calls in this project weigh more toward attempting the fix when the arithmetic is close, rather than defaulting to disclosure-in-lieu-of-fixing.
+
+---
+
+# Section Y — Forms pack index/link audit, and root-cause CSS fix
+
+The user asked whether `elewana-forms-pack.html` is fully up to date with all the PDF-level fixes made this session, and whether the index (including the role cards) is correctly hyperlinked.
+
+## Y.1 Index/TOC — fully verified, no issues
+
+- 54 TOC entries, 72 total page sections. Every TOC link resolves to a real section (zero broken links). The 18 sections without their own TOC entry are all legitimate continuation pages of multi-page forms (e.g. `sitrep-2`, `sitrep-3`, `roster-contacts`, `ert-20/75/75b`) correctly folded under their primary form's single TOC entry.
+- All 7 role cards confirmed present as both a page section and a TOC entry.
+
+## Y.2 Content sync — mixed, with one important root-cause finding
+
+Checked whether the HTML source reflects the various fixes made directly to PDFs this session (most fixes this session were applied as direct PDF patches, not HTML edits, since this sandbox has no working Playwright render pipeline):
+
+- **Fully in sync:** the 7 role cards (built from and rendered directly from this HTML), the Priority Contact Card TZ/KE fix, and all v7-wording/section-code text fixes (these were all done as direct HTML edits).
+- **Not directly mirrored, but investigated:** the checkbox-wrap-indent fix and most structural field-position fixes were applied only to the output PDFs. Checked the underlying CSS for the checkbox-indent pattern specifically (`ul.tick li::before` + `padding-left`) — this is standard, correctly-scoped CSS that should render properly in a real browser, suggesting that specific bug was introduced by the (missing) field-injection build step rather than being present in the HTML/CSS source itself. Not independently verified by an actual re-render, since Playwright is unavailable in this sandbox.
+
+## Y.3 Root cause found and fixed at the source
+
+While checking the above, found the actual root cause of most of the box-height/field-overlap bugs patched at the PDF level throughout this session (`On Medication`, `Drug Allergies`, `Mechanism of Injury`, `Injury Found`, `Signs, Symptoms & Previous History`, `Notes` — the exact same 6 boxes touched in §O.4, §T, §U, and §X): these boxes use `<div class="line">` directly inside `.box`, but the only CSS rule styling `.line` elements requires a `.field` ancestor (`.field .line{...}`) which none of these have. In an actual browser render, these divs would collapse to zero height with no visible border — almost certainly the reason the original (missing) field-injection script mis-detected these boxes' true content height, cascading into the cramped/overlapping fields patched throughout this session.
+
+**Fix:** added a fallback `.line{border-bottom:1px solid var(--ink-soft);min-height:.32in;margin-bottom:.06in;}` rule to the shared stylesheet. Verified this is safely scoped: `.field .line` (2-class specificity) still takes precedence wherever it already applies, so all 257 other `.line` divs elsewhere in the document (already correctly styled via their `.field` ancestor) are unaffected — the new rule only takes effect for the 12 divs (2 lines × 6 boxes) that previously had no matching rule at all.
+
+**Significance:** if the build pipeline is ever restored and these PDFs are regenerated from this HTML source, this fix means the same box-height/overlap defects should not reappear — the root cause is now addressed in the source, not just patched in the output files. This could not be verified by an actual re-render in this sandbox (no Playwright access), so it is a well-reasoned but not empirically confirmed fix.

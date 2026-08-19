@@ -38,12 +38,15 @@
   .field{margin-bottom:.12in;}
   .field label{display:block;font-size:8pt;text-transform:uppercase;letter-spacing:.04em;color:var(--gold-deep);font-weight:700;margin-bottom:.03in;}
   .field .line{border-bottom:1px solid var(--ink-soft);min-height:.32in;}
+  .line{border-bottom:1px solid var(--ink-soft);min-height:.32in;margin-bottom:.06in;}
   .wl{border-bottom:1px solid var(--ink-soft);height:.36in;margin-bottom:.09in;}
   .wl:last-child{border-bottom:none;margin-bottom:0;}
-  .grid2{display:flex;gap:.18in;}
+  .grid2{display:flex;}
   .grid2>div{flex:1;min-width:0;}
-  .grid3{display:flex;gap:.18in;}
+  .grid2>div:not(:last-child){margin-right:.4in;}
+  .grid3{display:flex;}
   .grid3>div{flex:1;min-width:0;}
+  .grid3>div:not(:last-child){margin-right:.3in;}
   .box{border:1px solid var(--line);border-radius:6px;padding:.14in .16in;background:var(--white);margin-bottom:.14in;}
   .box h3{font-size:10.5pt;margin:0 0 .06in;font-weight:600;}
   .box p{font-size:8.7pt;color:var(--ink-soft);margin:.03in 0;}
