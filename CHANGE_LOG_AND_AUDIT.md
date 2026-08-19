@@ -680,3 +680,17 @@ All items from §O.13 remain outstanding and unchanged. No new unresolved items 
 ## P.9 Sign-off
 
 > I confirm all 46 editable PDFs in the current forms set have now been visually inspected, not merely structurally verified. Four genuine defects were found beyond the original P1/P2 scope and are fixed and verified in this pass: stale absolute external-comms wording in `ckl-medical.pdf`, misaligned sign-off fields in `fnb-stock-sheet.pdf`, a missing radio code in `radio-codes.pdf`, and a fully missing page in `roster.pdf`. All fixes are verified by page count, field count, structural validation (`qpdf --check`), and visual rendering. The one disclosed limitation is noted in §P.5 above and does not, on current evidence, indicate a functional defect.
+
+---
+
+# Section Q — Logo background bug found and fixed (immediate follow-up)
+
+Immediately after delivery, the user reported the Elewana logo had a black background on `roster.pdf` page 2. Confirmed on inspection: real defect, isolated to that one newly-built page only.
+
+**Root cause:** when building `roster.pdf` page 2 (§P.5), the logo was extracted from the original `roster.pdf` page 1 via `fitz.Pixmap(doc, xref)` + `.save()`, which flattened the image from RGBA (transparent background, 6000×2353) to RGB (opaque, 800×314) — silently discarding the alpha channel. reportlab's `drawImage(..., mask='auto')` then had no transparency information to work with and rendered the transparent-background area as solid black.
+
+**Fix:** rebuilt page 2 using the original, known-good `elewana-logo.png` (confirmed RGBA, already used successfully and cleanly in all 7 role cards) instead of the flawed extracted copy. Re-merged onto a freshly restored pristine copy of the original single-page `roster.pdf` (pulled from git history, since the previously-installed 2-page version had already overwritten the working copy in this session's sandbox) to avoid compounding the fix on top of the broken version.
+
+**Verification:** logo now renders with a clean transparent background, matching the role cards and every other document in the set. Confirmed via close-up render of the logo area, full-page render of page 2, and a check that page 1 (untouched throughout) remains correct. Field/page counts re-confirmed unchanged: 2 pages, 94 fields, `qpdf --check` clean.
+
+This is now the second time in this session a redaction/extraction boundary or asset-handling mistake was caught by direct visual re-inspection rather than being missed — both `fnb-stock-sheet.pdf` (§P.3) and this logo issue were caught before or immediately after delivery, not left undetected. Noting this pattern transparently: image/asset extraction steps in this sandbox (without the original render pipeline) carry real risk of this class of error, and each one has required a dedicated verification pass to catch.
