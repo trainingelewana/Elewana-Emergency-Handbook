@@ -41,10 +41,8 @@
   .line{border-bottom:1px solid var(--ink-soft);min-height:.32in;margin-bottom:.06in;}
   .wl{border-bottom:1px solid var(--ink-soft);height:.36in;margin-bottom:.09in;}
   .wl:last-child{border-bottom:none;margin-bottom:0;}
-  .grid2{display:flex;flex-wrap:wrap;margin-right:-.4in;}
-  .grid2>div{flex:0 0 calc(50% - .4in);margin-right:.4in;margin-bottom:.12in;min-width:0;}
-  .grid3{display:flex;flex-wrap:wrap;margin-right:-.3in;}
-  .grid3>div{flex:0 0 calc(33.333% - .3in);margin-right:.3in;margin-bottom:.12in;min-width:0;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.18in;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.18in;}
   .box{border:1px solid var(--line);border-radius:6px;padding:.14in .16in;background:var(--white);margin-bottom:.14in;}
   .box h3{font-size:10.5pt;margin:0 0 .06in;font-weight:600;}
   .box p{font-size:8.7pt;color:var(--ink-soft);margin:.03in 0;}
@@ -71,14 +69,17 @@
   .cover-logo-wrap{margin-bottom:.35in;}
   .cover-logo{height:.9in;width:3.6in;display:block;background-image:var(--logo-src);background-repeat:no-repeat;background-position:center;background-size:contain;}
 
-  .dl-btn{position:absolute;top:.12in;right:.22in;background:var(--gold);color:#fff;border:none;border-radius:5px;padding:.06in .13in;font-size:7.3pt;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;z-index:5;letter-spacing:.02em;}
+  .pg-btns{position:absolute;top:.12in;right:.22in;display:flex;gap:.08in;z-index:5;}
+  .dl-btn{background:var(--gold);color:#fff;border:none;border-radius:5px;padding:.06in .13in;font-size:7.3pt;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;letter-spacing:.02em;}
   .dl-btn:hover{background:var(--gold-deep);}
+  .print-btn{background:var(--white);color:var(--gold-deep);border:1px solid var(--gold);border-radius:5px;padding:.06in .13in;font-size:7.3pt;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;letter-spacing:.02em;}
+  .print-btn:hover{background:var(--cream-deep);}
   .dl-btn-all{margin-top:.3in;background:var(--gold);color:#fff;border:none;border-radius:6px;padding:.1in .22in;font-size:9.5pt;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;letter-spacing:.02em;}
   .dl-btn-all:hover{background:var(--gold-deep);}
   .index-link{position:absolute;top:.12in;left:.22in;color:var(--gold-deep);border:1px solid var(--gold);border-radius:5px;padding:.06in .13in;font-size:7.3pt;font-family:'Inter',sans-serif;font-weight:600;text-decoration:none;z-index:5;letter-spacing:.02em;background:var(--white);}
   .index-link:hover{background:var(--cream-deep);}
   @media print{
-    .dl-btn{display:none !important;}
+    .pg-btns{display:none !important;}
     .dl-btn-all{display:none !important;}
     .index-link{display:none !important;}
     [data-hide-print]{display:none !important;}
@@ -169,7 +170,7 @@
       <li><a class="toc-link" href="#packing-list"><span class="ref">A39</span><span class="lbl">Packing List Template</span><span class="pg">Page 55</span></a></li>
       <li><a class="toc-link" href="#guest-manifest"><span class="ref">A40</span><span class="lbl">Guest Manifest Template (Balloon)</span><span class="pg">Page 56</span></a></li>
       <li><a class="toc-link" href="#symptom-log"><span class="ref">A41</span><span class="lbl">Symptom Tracking Log</span><span class="pg">Page 57</span></a></li>
-      <li><a class="toc-link" href="#trauma-obs"><span class="ref">A42</span><span class="lbl">Trauma &amp; Vitals — 15-Minute Observation Chart + Body Chart</span><span class="pg">Page 58–59</span></a></li>
+      <li><a class="toc-link" href="#trauma-obs"><span class="ref">A42</span><span class="lbl">Trauma &amp; Vitals — 15-Minute Observation Chart + Body Chart</span><span class="pg">Page 58–60</span></a></li>
       <li><a class="toc-link" href="#nonphone-threat-guide"><span class="ref">A43</span><span class="lbl">Non-Phone Threat Guide</span><span class="pg">Page 60</span></a></li>
       <li><a class="toc-link" href="#fnb-stock-sheet"><span class="ref">A44</span><span class="lbl">F&amp;B Stock Sheet</span><span class="pg">Page 61</span></a></li>
       <li><a class="toc-link" href="#generator-fuel-register"><span class="ref">—</span><span class="lbl">Generator &amp; Fuel Stock Sheet (property record)</span><span class="pg">Page 61a (NEW, no A-code)</span></a></li>
@@ -190,7 +191,7 @@
 <section class="page" id="roster">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A2 · Section 6.1.1.6</div><h2 class="pg-title">Weekly ICS Duty Roster</h2><p class="pg-sub">Display on Staff Notice Boards and behind Reception and Admin Offices. Update at every shift change with a handover signature.</p></div><div class="pg-ref">Week of: ____ / ____ / ____<div style="margin-top:.16in;">Property: ______________</div></div></div>
-  <button class="dl-btn" onclick="downloadForm('roster')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('roster')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('roster')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm">
@@ -213,7 +214,7 @@
 
 <section class="page" id="roster-contacts">
   <div class="pg-head"><div><div class="pg-eyebrow">A2 · Section 6.1.1.6</div><h2 class="pg-title">Weekly Role Contacts</h2><p class="pg-sub">Since roles rotate through the week, record everyone covering each role here with a phone number — up to 3 people per role.</p></div><div class="pg-ref">Week of: ____ / ____ / ____</div></div>
-  <button class="dl-btn" onclick="downloadForm('roster-contacts')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('roster-contacts')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('roster-contacts')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm">
@@ -249,7 +250,7 @@
 <section class="page" id="ert-5">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A3 · Section 6.1.3</div><h2 class="pg-title">ERT Team Template — 5–10 Rooms</h2><p class="pg-sub">Emergency Response Team roles for a small property. Fill in names and contact numbers; keep a copy at the Command Post.</p></div><div class="pg-ref">Property: ______________</div></div>
-  <button class="dl-btn" onclick="downloadForm('ert-5')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ert-5')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ert-5')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm">
@@ -270,7 +271,7 @@
 
 <section class="page" id="ert-20">
   <div class="pg-head"><div><div class="pg-eyebrow">A3 · Section 6.1.3</div><h2 class="pg-title">ERT Team Template — 20 Rooms</h2><p class="pg-sub">Emergency Response Team roles for a mid-sized property.</p></div><div class="pg-ref">Property: ______________</div></div>
-  <button class="dl-btn" onclick="downloadForm('ert-20')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ert-20')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ert-20')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm">
@@ -291,7 +292,7 @@
 
 <section class="page" id="ert-75">
   <div class="pg-head"><div><div class="pg-eyebrow">A3 · Section 6.1.3</div><h2 class="pg-title">ERT Team Template — 75 Rooms</h2><p class="pg-sub">Emergency Response Team roles for a large property.</p></div><div class="pg-ref">Property: ______________</div></div>
-  <button class="dl-btn" onclick="downloadForm('ert-75')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ert-75')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ert-75')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <p style="font-size:8.3pt;color:var(--ink-soft);margin:0 0 .1in;">Page 1 of 2 — Leadership, Medical, and Fire Response. Security, Evacuation, and Communication continue on the next page.</p>
@@ -310,7 +311,7 @@
 
 <section class="page" id="ert-75b">
   <div class="pg-head"><div><div class="pg-eyebrow">A3 · Section 6.1.3</div><h2 class="pg-title">ERT Team Template — 75 Rooms (cont.)</h2><p class="pg-sub">Security, Evacuation, and Communication &amp; Reporting.</p></div><div class="pg-ref">Property: ______________</div></div>
-  <button class="dl-btn" onclick="downloadForm('ert-75b')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ert-75b')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ert-75b')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <p style="font-size:8.3pt;color:var(--ink-soft);margin:0 0 .1in;">Page 2 of 2 — continued from the previous page.</p>
@@ -330,7 +331,7 @@
 <section class="page" id="contact-card">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A4-TZ · Section 5 / Common</div><h2 class="pg-title">Priority Contact Card — Tanzania</h2><p class="pg-sub">Laminate and issue to all key team members at Tanzania properties.</p></div><div class="pg-ref">Property: ______________</div></div>
-  <button class="dl-btn" onclick="downloadForm('contact-card')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('contact-card')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('contact-card')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm">
@@ -366,7 +367,7 @@
 <section class="page" id="contact-card-ke">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A4-KE · Section 5 / Common</div><h2 class="pg-title">Priority Contact Card — Kenya</h2><p class="pg-sub">Laminate and issue to all key team members at Kenya properties.</p></div><div class="pg-ref">Property: ______________</div></div>
-  <button class="dl-btn" onclick="downloadForm('contact-card-ke')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('contact-card-ke')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('contact-card-ke')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm">
@@ -402,7 +403,7 @@
 <section class="page" id="first-aiders">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A5 · Section 6 / Common</div><h2 class="pg-title">Onsite First Aiders &amp; Fire Marshals</h2><p class="pg-sub">Keep current — update whenever certifications change or staff turn over.</p></div><div class="pg-ref">Property: ______________</div></div>
-  <button class="dl-btn" onclick="downloadForm('first-aiders')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('first-aiders')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('first-aiders')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm">
@@ -439,7 +440,7 @@
 <section class="page" id="amref">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A6 · Section 8.1 / Common medical support</div><h2 class="pg-title">AMREF / Flying Doctors / Arusha Medivac — Required Information</h2><p class="pg-sub">Gather this information before requesting an evacuation. Decisions must be confirmed before 16:00 for same-day air mobilisation.</p></div><div class="pg-ref">Page 1 of 2</div></div>
-  <button class="dl-btn" onclick="downloadForm('amref')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('amref')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('amref')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm" style="font-size:8.2pt;">
@@ -470,7 +471,7 @@
 
 <section class="page" id="amref-2">
   <div class="pg-head"><div><div class="pg-eyebrow">A6 · Section 8.1 / Common medical support</div><h2 class="pg-title">AMREF / Flying Doctors / Arusha Medivac — Required Information (cont.)</h2><p class="pg-sub">Evacuation logistics, medical support, administrative, and other details.</p></div><div class="pg-ref">Page 2 of 2</div></div>
-  <button class="dl-btn" onclick="downloadForm('amref-2')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('amref-2')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('amref-2')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm" style="font-size:8.2pt;">
@@ -499,7 +500,7 @@
 <section class="page" id="medical-report">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A7 · Section 8.1 / Medical support</div><h2 class="pg-title">Medical Incident Form</h2><p class="pg-sub">Complete the Elewana Incident Report in conjunction with this form. Submit to Head Office within 24 hours, with IC approval. Retain 5 years.</p></div><div class="pg-ref">Page 1 of 2</div></div>
-  <button class="dl-btn" onclick="downloadForm('medical-report')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('medical-report')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('medical-report')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8.3pt;">
     <div class="grid3" style="margin-bottom:.1in;">
@@ -545,7 +546,7 @@
 
 <section class="page" id="medical-report-vitals">
   <div class="pg-head"><div><div class="pg-eyebrow">A7 · Section 8.1 / Medical support</div><h2 class="pg-title">Medical Incident Form — Vital Signs &amp; Treatment</h2><p class="pg-sub">Continued from page 1. NB: if going to hospital, take an overnight bag, ID/passport, and medical aid card.</p></div><div class="pg-ref">Page 2 of 2</div></div>
-  <button class="dl-btn" onclick="downloadForm('medical-report-vitals')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('medical-report-vitals')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('medical-report-vitals')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <p style="font-size:9pt;font-weight:700;margin:0 0 .06in;">Record of Vital Signs <span style="font-weight:400;color:var(--ink-soft);">(N/A if not applicable)</span></p>
@@ -589,8 +590,8 @@
 
 <section class="page" id="trauma-obs">
   <div class="pg-head">
-  <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A42 · Section 8.1 / Medical support</div><h2 class="pg-title">Trauma &amp; Vitals — 15-Minute Observation Chart</h2><p class="pg-sub">Use during active casualty care, before and while completing the Medical Incident Report (A7). Record a fresh reading in the next time column at least every 15 minutes.</p></div><div class="pg-ref">Page 1 of 2</div></div>
-  <button class="dl-btn" onclick="downloadForm('trauma-obs')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A42 · Section 8.1 / Medical support</div><h2 class="pg-title">Trauma &amp; Vitals — 15-Minute Observation Chart</h2><p class="pg-sub">Use during active casualty care, before and while completing the Medical Incident Report (A7). Record a fresh reading in the next time column at least every 15 minutes.</p></div><div class="pg-ref">Page 1 of 3</div></div>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('trauma-obs')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('trauma-obs')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8pt;">
     <div class="grid3" style="margin-bottom:.12in;">
@@ -670,8 +671,8 @@
 
 <section class="page" id="trauma-obs-back">
   <div class="pg-head">
-  <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A42 · Section 8.1 / Medical support</div><h2 class="pg-title">Trauma Assessment &amp; Body Chart</h2><p class="pg-sub">Initial casualty assessment. Complete alongside the 15-Minute Observation Chart (page 1), then transfer key findings to the Medical Incident Report (A7).</p></div><div class="pg-ref">Page 2 of 2</div></div>
-  <button class="dl-btn" onclick="downloadForm('trauma-obs-back')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A42 · Section 8.1 / Medical support</div><h2 class="pg-title">Trauma Assessment &amp; Body Chart</h2><p class="pg-sub">Initial casualty assessment. Complete alongside the 15-Minute Observation Chart (page 1), then transfer key findings to the Medical Incident Report (A7). Body diagram continues on page 3.</p></div><div class="pg-ref">Page 2 of 3</div></div>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('trauma-obs-back')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('trauma-obs-back')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8.3pt;">
     <div class="grid3" style="margin-bottom:.12in;">
@@ -725,12 +726,20 @@
       </div>
     </div>
 
-    <div class="box" style="margin-bottom:.14in;">
+    <div class="box" style="margin-bottom:0;">
       <h3>Notes</h3>
       <div class="line"></div>
       <div class="line"></div>
     </div>
+  </div>
+</section>
 
+<section class="page" id="trauma-obs-chart">
+  <div class="pg-head">
+  <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A42 · Section 8.1 / Medical support</div><h2 class="pg-title">Trauma Chart — Body Diagram</h2><p class="pg-sub">Mark wounds, burns, fractures, and tourniquet placement on the diagrams below. Record % burn surface area at the bottom.</p></div><div class="pg-ref">Page 3 of 3</div></div>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('trauma-obs-chart')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('trauma-obs-chart')" title="Print this page">Print PDF</button></div>
+  <a class="index-link" href="#index" title="Return to the index">← Index</a>
+  <div class="pg-body" style="font-size:8.3pt;">
     <div class="box" style="margin-bottom:0;">
       <h3 style="text-align:center;">Trauma Chart</h3>
       <div style="display:flex;justify-content:center;align-items:flex-end;gap:.16in;">
@@ -767,7 +776,7 @@
 <section class="page" id="fire-checklist">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A8 · Section 8.2</div><h2 class="pg-title">Fire Safety Preventative Checklist</h2><p class="pg-sub">Tick off each week. Keep completed checklists for 2 years for audit purposes.</p></div><div class="pg-ref">Month: __________<br>Property: __________</div></div>
-  <button class="dl-btn" onclick="downloadForm('fire-checklist')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('fire-checklist')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('fire-checklist')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="display:flex;flex-direction:column;">
     <table class="frm">
@@ -801,7 +810,7 @@
 <section class="page" id="equipment-audit">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A9 · Section 8.2</div><h2 class="pg-title">Equipment Audit Template</h2><p class="pg-sub">Extinguisher and safety-equipment log — record condition and any action needed.</p></div><div class="pg-ref">Property: ______________</div></div>
-  <button class="dl-btn" onclick="downloadForm('equipment-audit')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('equipment-audit')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('equipment-audit')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm">
@@ -829,7 +838,7 @@
 <section class="page" id="bomb-checklist">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A10 · Section 8.5</div><h2 class="pg-title">Bomb Threat Information Sheet</h2><p class="pg-sub">Be calm, be courteous. Listen. Do not interrupt the caller. Act quickly.</p></div></div>
-  <button class="dl-btn" onclick="downloadForm('bomb-checklist')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('bomb-checklist')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('bomb-checklist')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8.3pt;">
     <div class="grid3" style="margin-bottom:.12in;">
@@ -870,7 +879,7 @@
 
 <section class="page" id="bomb-checklist-2">
   <div class="pg-head"><div><div class="pg-eyebrow">A10 · Section 8.5</div><h2 class="pg-title">Bomb Threat — Questions to Ask</h2><p class="pg-sub">Keep calm, pretend difficulty hearing, keep the caller talking. If the caller seems agreeable to further conversation, ask:</p></div></div>
-  <button class="dl-btn" onclick="downloadForm('bomb-checklist-2')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('bomb-checklist-2')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('bomb-checklist-2')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="box"><ul class="tick roomy">
@@ -900,7 +909,7 @@
 <section class="page" id="nonphone-threat-guide">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A43 · Section 8.5</div><h2 class="pg-title">Non-Phone Threat Guide</h2><p class="pg-sub">For a threat received by email, social media, written note, or in person. Use the Bomb Threat Information Sheet (A10) instead for a phone call.</p></div></div>
-  <button class="dl-btn" onclick="downloadForm('nonphone-threat-guide')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('nonphone-threat-guide')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('nonphone-threat-guide')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8.6pt;">
     <div class="grid3" style="gap:.16in;margin-bottom:.14in;">
@@ -973,7 +982,7 @@
 <section class="page" id="vehicle-report">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A11 · Section 9.2.7</div><h2 class="pg-title">Vehicle Incident Report Form</h2><p class="pg-sub">Confidential — for internal and legal use. Complete and submit to Head Office within 12–24 hours, with the Police Abstract Report attached where applicable.</p></div><div class="pg-ref">Page 1 of 3</div></div>
-  <button class="dl-btn" onclick="downloadForm('vehicle-report')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('vehicle-report')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('vehicle-report')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8.3pt;">
     <div class="box" style="margin-bottom:.14in;">
@@ -1009,7 +1018,7 @@
 
 <section class="page" id="vehicle-report-2">
   <div class="pg-head"><div><div class="pg-eyebrow">A11 · Section 9.2.7</div><h2 class="pg-title">Vehicle Incident Report Form — Account &amp; Findings</h2><p class="pg-sub">Continued from page 1.</p></div><div class="pg-ref">Page 2 of 3</div></div>
-  <button class="dl-btn" onclick="downloadForm('vehicle-report-2')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('vehicle-report-2')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('vehicle-report-2')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="box" style="margin-bottom:.14in;">
@@ -1041,7 +1050,7 @@
 
 <section class="page" id="vehicle-report-3">
   <div class="pg-head"><div><div class="pg-eyebrow">A11 · Section 9.2.7</div><h2 class="pg-title">Vehicle Incident Report Form — Cause, Actions &amp; Sign-Off</h2><p class="pg-sub">Continued from page 2.</p></div><div class="pg-ref">Page 3 of 3</div></div>
-  <button class="dl-btn" onclick="downloadForm('vehicle-report-3')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('vehicle-report-3')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('vehicle-report-3')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8pt;">
     <p style="font-size:9pt;font-weight:700;margin:0 0 .05in;">Cause of Incident</p>
@@ -1091,7 +1100,7 @@
 <section class="page" id="death-report">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A12 · Section 8.8</div><h2 class="pg-title">Death in Camp/Lodge Report</h2><p class="pg-sub">Submit with supporting documentation to Head Office within 24 hours. No photographs or media permitted.</p></div><div class="pg-ref">Ref #: __________</div></div>
-  <button class="dl-btn" onclick="downloadForm('death-report')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('death-report')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('death-report')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="grid3">
@@ -1134,7 +1143,7 @@
 <section class="page" id="missing-log">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A13 · Missing Person / Lost Guest</div><h2 class="pg-title">Missing Person Search Log</h2><p class="pg-sub">Open immediately — do not wait for a full description before starting the search.</p></div></div>
-  <button class="dl-btn" onclick="downloadForm('missing-log')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('missing-log')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('missing-log')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="grid3">
@@ -1164,7 +1173,7 @@
 <section class="page" id="incident-report">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A14 · Generic report — used by every scenario</div><h2 class="pg-title">Incident Report Form</h2><p class="pg-sub">Internal use only. Every emergency type ends with this report — submit to Head Office within 24 hours.</p></div><div class="pg-ref">Page 1 of 2</div></div>
-  <button class="dl-btn" onclick="downloadForm('incident-report')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('incident-report')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('incident-report')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="box" style="margin-bottom:.14in;">
@@ -1204,7 +1213,7 @@
 
 <section class="page" id="incident-report-2">
   <div class="pg-head"><div><div class="pg-eyebrow">A14 · Generic report — used by every scenario</div><h2 class="pg-title">Incident Report Form — Action Taken &amp; Recommendation</h2><p class="pg-sub">Continued from page 1.</p></div><div class="pg-ref">Page 2 of 2</div></div>
-  <button class="dl-btn" onclick="downloadForm('incident-report-2')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('incident-report-2')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('incident-report-2')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="box" style="margin-bottom:.14in;">
@@ -1237,7 +1246,7 @@
 <section class="page" id="sitrep">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A15 · Country Shutdown</div><h2 class="pg-title">Daily Situation Report (SITREP)</h2><p class="pg-sub">Complete twice daily (AM &amp; PM) during any national restriction, lockdown, or shutdown period.</p></div><div class="pg-ref">Page 1 of 3</div></div>
-  <button class="dl-btn" onclick="downloadForm('sitrep')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('sitrep')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('sitrep')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="grid3">
@@ -1285,7 +1294,7 @@
 
 <section class="page" id="sitrep-2">
   <div class="pg-head"><div><div class="pg-eyebrow">A15 · Country Shutdown</div><h2 class="pg-title">SITREP — Security &amp; Communications</h2><p class="pg-sub">Continued from page 1.</p></div><div class="pg-ref">Page 2 of 3</div></div>
-  <button class="dl-btn" onclick="downloadForm('sitrep-2')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('sitrep-2')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('sitrep-2')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <p style="font-size:9pt;font-weight:700;margin:0 0 .05in;">4. Security &amp; Safety</p>
@@ -1323,7 +1332,7 @@
 
 <section class="page" id="sitrep-3">
   <div class="pg-head"><div><div class="pg-eyebrow">A15 · Country Shutdown</div><h2 class="pg-title">SITREP — Guest, Operations &amp; Sign-Off</h2><p class="pg-sub">Continued from page 2.</p></div><div class="pg-ref">Page 3 of 3</div></div>
-  <button class="dl-btn" onclick="downloadForm('sitrep-3')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('sitrep-3')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('sitrep-3')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <p style="font-size:9pt;font-weight:700;margin:0 0 .05in;">7. Guest Management</p>
@@ -1368,7 +1377,7 @@
 <section class="page" id="crisis-pack">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A16 · Crisis Communications</div><h2 class="pg-title">Crisis Communications Pack</h2><p class="pg-sub">Three short forms used together during external communications.</p></div></div>
-  <button class="dl-btn" onclick="downloadForm('crisis-pack')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('crisis-pack')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('crisis-pack')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <p style="font-size:9pt;font-weight:700;margin:0 0 .05in;">Notification Log</p>
@@ -1416,7 +1425,7 @@
 <section class="page" id="drill-register">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A17 · Training</div><h2 class="pg-title">Drill Attendance Register</h2><p class="pg-sub">Record every training session and drill. Keep for at least 2 years for audit purposes.</p></div></div>
-  <button class="dl-btn" onclick="downloadForm('drill-register')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('drill-register')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('drill-register')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm">
@@ -1440,7 +1449,7 @@
 <section class="page" id="ckl-medical">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A18 · Section 8.1</div><h2 class="pg-title">ICS Activation Checklist — Medical Emergency</h2><p class="pg-sub">Printable version of the on-screen checklist for the Medical Emergency scenario.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-medical')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-medical')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-medical')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Check safety</td><td><ul><li>Confirm scene safety before approaching; stop the cause of injury (vehicle off, power cut, wildlife clear).</li><li>Assess number of victims, hazards, level of consciousness; assign a team member to crowd control.</li><li>Do not move the victim unless in imminent danger; clear non-essential people from the area.</li><li>Notify IC/OC: "Code Medical — [Location] — [number of patients]."</li></ul></td><td class="role">1st Responder / Nearby Team / Security</td><td class="confirm"><ul class="tick"><li>Confirmed safety</li><li>Location, victims, hazards, consciousness confirmed</li><li>Alarm raised, IC informed</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS</td><td><ul><li>IC activates ICT/ERT and assigns OC, LC, EC, Medic, Responders; EC logs activation time.</li><li>IC notifies Head Office and activates external medical support; EC maintains the medical log.</li><li>OC assigns Responders to secure the area; LC assists with transfers and equipment.</li></ul></td><td class="role">IC / EC / OC / LC</td><td class="confirm"><ul class="tick"><li>ICT/ERT activated, roles assigned</li><li>EC log started</li><li>HO notified · Medical support contacted (AMREF)</li><li>Safety perimeter set · Transport &amp; equipment prepared</li></ul></td></tr><tr><td class="tf">3–5 min</td><td class="step">Step 3 — Medical assessment</td><td><ul><li>Medic assesses Airway/Breathing/Circulation and initiates first aid.</li><li>Prepare for transport to the nearest medical facility; OC secures and crowd-controls the area.</li><li>Check other guests for shock; cover, warm, raise legs, reassure — no alcohol.</li></ul></td><td class="role">Medic / OC / Responders</td><td class="confirm"><ul class="tick"><li>Patient stabilised</li><li>Transport arranged if required</li><li>Area secured · Guests checked for shock</li></ul></td></tr><tr><td class="tf">5–10 min</td><td class="step">Step 4 — Evacuation prep</td><td><ul><li>LC prepares the vehicle; EC contacts AMREF / Flying Doctors / Arusha Medivac if instructed by IC.</li><li>Medic stabilises the patient for movement; IC authorises road or air evacuation.</li><li>Gather information for the AMREF checklist and Medical Incident Report.</li></ul></td><td class="role">LC / EC / Medic / IC</td><td class="confirm"><ul class="tick"><li>Transport prepared · Evac approved</li><li>Medevac provider contacted if needed</li><li>Medical report completed for handover</li></ul></td></tr><tr><td class="tf">10–15 min</td><td class="step">Step 5 — External coordination</td><td><ul><li>IC maintains command and communication with Head Office and authorities.</li><li>EC provides ETA to Head Office and the medevac service. External comms normally go via the IC, except in a life-threatening emergency: contact services directly, then notify the IC.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>Head Office updated</li></ul></td></tr><tr><td class="tf">15–30 min</td><td class="step">Step 6 — Evacuation / transfer</td><td><ul><li>Patient moved safely; OC clears the path, LC guides to the landing zone or gate.</li><li>Responders assist lifting; arrange alternative transport for unaffected guests; Medic monitors vitals.</li><li>Night landings: LC prepares airstrip lighting — vehicle headlights into wind, lamps along the runway.</li></ul></td><td class="role">OC / LC / Medic</td><td class="confirm"><ul class="tick"><li>Patient transferred · other transfers arranged</li><li>Night evac airstrip lights prepared if needed</li></ul></td></tr><tr><td class="tf">30–60 min</td><td class="step">Step 7 — Handover</td><td><ul><li>Medic gives a verbal and written summary to ambulance/flight crew.</li><li>EC records the handover name and time; IC confirms safe handover and updates Head Office.</li></ul></td><td class="role">Medic / EC / IC</td><td class="confirm"><ul class="tick"><li>Transfer logged · handover time recorded</li><li>Head Office updated</li></ul></td></tr><tr><td class="tf">Within 24 hrs</td><td class="step">Step 8 — Debrief &amp; reporting</td><td><ul><li>IC leads a 15-minute debrief within 2 hours of All Clear.</li><li>EC completes the Medical Incident Report and submits to Head Office within 24 hours with IC approval.</li><li>Medic restocks supplies and reviews equipment condition.</li></ul></td><td class="role">IC / EC / Medic / OC / LC</td><td class="confirm"><ul class="tick"><li>Report submitted · debrief done</li><li>Supplies restocked</li></ul></td></tr></tbody></table>
@@ -1451,10 +1460,10 @@
 <section class="page" id="ckl-fire">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A19 · Section 8.2</div><h2 class="pg-title">ICS Activation Checklist — Fire Emergency</h2><p class="pg-sub">Printable version of the on-screen checklist for the Fire Emergency scenario.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-fire')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-fire')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-fire')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
-    <table class="ckl-table"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Check safety</td><td><ul><li>Shout "FIRE!" and raise the alarm / hit the manual alarm.</li><li>Radio: "Code Red — [Location] — [Fire Type]." IC activates ICS; OC deploys to the scene.</li></ul></td><td class="role">1st Responder / Security</td><td class="confirm"><ul class="tick"><li>Alarm raised · location confirmed</li><li>IC alerted</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS</td><td><ul><li>IC activates ICS and assigns OC, LC, Fire Marshal, EC, Medic.</li><li>OC proceeds to the fire scene to assess severity; EC logs time and informs Head Office; Fire Marshal mobilises the response team.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>ICS active · ERT activated</li><li>Fire Marshal mobilised response team</li><li>HO informed</li></ul></td></tr><tr><td class="tf">3–5 min</td><td class="step">Step 3 — Contain / isolate</td><td><ul><li>Fire Marshal leads on-site firefighting with Responders using extinguishers, sand, or hoses only if safe.</li><li>LC switches off main power/fuel supply when cleared by IC; OC ensures fire doors and containment are followed.</li></ul></td><td class="role">Fire Marshal / OC</td><td class="confirm"><ul class="tick"><li>Main power &amp; fuel shut down</li><li>Fire contained · injuries treated</li></ul></td></tr><tr><td class="tf">5–10 min</td><td class="step">Step 4 — Evacuation / assembly</td><td><ul><li>OC directs evacuation routes; Responders and HODs assist guests to muster points without collecting belongings.</li><li>LC keeps alarm systems and comms active; Fire Marshal checks rooms and reports "All Clear Zone 1" etc.; EC logs headcount and missing persons.</li></ul></td><td class="role">OC / Responders / Fire Marshal</td><td class="confirm"><ul class="tick"><li>Alarm &amp; comms active</li><li>Evacuation complete · headcount complete</li></ul></td></tr><tr><td class="tf">10–15 min</td><td class="step">Step 5 — External coordination</td><td><ul><li>IC contacts the park fire team or local authorities; maintains clear radio traffic as sole external liaison.</li><li>EC updates Head Office every 5 minutes until the fire is contained.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>Authorities contacted · HO updated</li></ul></td></tr><tr><td class="tf">15–30 min</td><td class="step">Step 6 — Medical care / support</td><td><ul><li>First aid: treat burns, inhalation, and shock; prepare for evacuation if required.</li><li>LC ensures backup generator power for lights and radios.</li></ul></td><td class="role">Medic / OC / LC</td><td class="confirm"><ul class="tick"><li>Medical assistance provided</li><li>Backup generator power in place if needed</li></ul></td></tr><tr><td class="tf">30–60 min</td><td class="step">Step 7 — Verification</td><td><ul><li>Confirm with Fire Marshal that no active fire remains; OC checks for secondary hazards (electrical arcs, fuel leaks).</li><li>IC declares "All Clear," or orders complete evacuation if fire cannot be controlled. No re-entry until All Clear.</li></ul></td><td class="role">IC / Fire Marshal / OC</td><td class="confirm"><ul class="tick"><li>No active fires · secondary hazards checked</li><li>All Clear declared or evacuation ordered</li></ul></td></tr><tr><td class="tf">Within 24 hrs</td><td class="step">Step 8 — Debrief &amp; reporting</td><td><ul><li>IC leads a formal debrief within 2 hours of containment.</li><li>EC submits the Fire Incident Report and headcount log to Head Office within 24 hours; Fire Marshal reviews equipment and drill records.</li></ul></td><td class="role">IC / EC / Fire Marshal / OC / LC / Medic</td><td class="confirm"><ul class="tick"><li>Team debriefed · report submitted</li><li>Equipment checked, replenished, drill records updated</li></ul></td></tr></tbody></table>
+    <table class="ckl-table"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Check safety</td><td><ul><li>Shout "FIRE!" and raise the alarm / hit the manual alarm.</li><li>Radio: "Code Red — [Location] — [Fire Type]." IC activates ICS; OC deploys to the scene.</li></ul></td><td class="role">1st Responder / Security</td><td class="confirm"><ul class="tick"><li>Alarm raised · location confirmed</li><li>IC alerted</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS</td><td><ul><li>IC activates ICS and assigns OC, LC, Fire Marshal, EC, Medic.</li><li>OC proceeds to the fire scene to assess severity; EC logs time and informs Head Office; Fire Marshal mobilises the response team.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>ICS active · ERT activated</li><li>Fire Marshal mobilised response team</li><li>HO informed</li></ul></td></tr><tr><td class="tf">3–5 min</td><td class="step">Step 3 — Contain / isolate</td><td><ul><li>Fire Marshal leads on-site firefighting with Responders using extinguishers, sand, or hoses only if safe.</li><li>LC switches off main power/fuel supply when cleared by IC; OC ensures fire doors and containment are followed.</li></ul></td><td class="role">Fire Marshal / OC</td><td class="confirm"><ul class="tick"><li>Main power &amp; fuel shut down</li><li>Fire contained · injuries treated</li></ul></td></tr><tr><td class="tf">5–10 min</td><td class="step">Step 4 — Evacuation / assembly</td><td><ul><li>OC directs evacuation routes; Responders and HODs assist guests to muster points without collecting belongings.</li><li>LC keeps alarm systems and comms active; Fire Marshal checks rooms and reports "All Clear Zone 1" etc.; EC logs headcount and missing persons.</li></ul></td><td class="role">OC / Responders / Fire Marshal</td><td class="confirm"><ul class="tick"><li>Alarm &amp; comms active</li><li>Evacuation complete · headcount complete</li></ul></td></tr><tr><td class="tf">10–15 min</td><td class="step">Step 5 — External coordination</td><td><ul><li>IC contacts the park fire team or local authorities and normally serves as the site operational liaison with external agencies. The Section 7.2 immediate life-safety external-call exception remains applicable.</li><li>EC updates Head Office every 5 minutes until the fire is contained.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>Authorities contacted · HO updated</li></ul></td></tr><tr><td class="tf">15–30 min</td><td class="step">Step 6 — Medical care / support</td><td><ul><li>First aid: treat burns, inhalation, and shock; prepare for evacuation if required.</li><li>LC ensures backup generator power for lights and radios.</li></ul></td><td class="role">Medic / OC / LC</td><td class="confirm"><ul class="tick"><li>Medical assistance provided</li><li>Backup generator power in place if needed</li></ul></td></tr><tr><td class="tf">30–60 min</td><td class="step">Step 7 — Verification</td><td><ul><li>Confirm with Fire Marshal that no active fire remains; OC checks for secondary hazards (electrical arcs, fuel leaks).</li><li>IC declares "All Clear," or orders complete evacuation if fire cannot be controlled. No re-entry until All Clear.</li></ul></td><td class="role">IC / Fire Marshal / OC</td><td class="confirm"><ul class="tick"><li>No active fires · secondary hazards checked</li><li>All Clear declared or evacuation ordered</li></ul></td></tr><tr><td class="tf">Within 24 hrs</td><td class="step">Step 8 — Debrief &amp; reporting</td><td><ul><li>IC leads a formal debrief within 2 hours of containment.</li><li>EC submits the Fire Incident Report and headcount log to Head Office within 24 hours; Fire Marshal reviews equipment and drill records.</li></ul></td><td class="role">IC / EC / Fire Marshal / OC / LC / Medic</td><td class="confirm"><ul class="tick"><li>Team debriefed · report submitted</li><li>Equipment checked, replenished, drill records updated</li></ul></td></tr></tbody></table>
   </div>
   <div class="pg-foot"><span>Elewana Collection · GEN PROP 01</span><span>A19 — ICS Activation Checklist (Fire)</span></div>
 </section>
@@ -1462,7 +1471,7 @@
 <section class="page" id="ckl-wildlife">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A20 · Section 8.3</div><h2 class="pg-title">ICS Activation Checklist — Wildlife Intrusion / Attack</h2><p class="pg-sub">Printable version of the on-screen checklist for the Wildlife Intrusion / Attack scenario.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-wildlife')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-wildlife')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-wildlife')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table" style="font-size:6.9pt;"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Check safety</td><td><ul><li>1st Responder identifies species and location; do NOT approach or make sudden noise.</li><li>Report to IC &amp; OC: "Code Wildlife — [Species] — [location, behaviour]." If an attack occurs, do not create additional casualties and do not attempt to fight the animal unless trained and safe.</li></ul></td><td class="role">1st Responder / Guide / Security</td><td class="confirm"><ul class="tick"><li>Guests secured · animal identified</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS</td><td><ul><li>IC activates ICT/ERT, assigns OC, LC, Medic, EC, and Security Responders, and establishes a Command Post.</li><li>EC logs time and description.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>ICT/ERT activated · HO informed</li></ul></td></tr><tr><td class="tf">3–5 min</td><td class="step">Step 3 — Initial containment</td><td><ul><li>Responders secure guests inside rooms or vehicles; block access paths quietly.</li><li>LC delivers torches, radios, and vehicles for visibility.</li></ul></td><td class="role">OC / Security / Guides</td><td class="confirm"><ul class="tick"><li>Area isolated · perimeter secure</li><li>Resources delivered</li></ul></td></tr><tr><td class="tf">5–10 min</td><td class="step">Step 4 — Communication &amp; coordination</td><td><ul><li>IC contacts park rangers/authority; EC updates Head Office.</li><li>Maintain calm; avoid crowding the incident area.</li></ul></td><td class="role">IC / EC / Park Authority</td><td class="confirm"><ul class="tick"><li>Park Authority contacted · HO updated</li><li>Area calm and controlled</li></ul></td></tr><tr><td class="tf">10–15 min</td><td class="step">Step 5 — Deterrence or medical aid</td><td><ul><li>OC oversees Trained Guides/Security deterring the animal using authorised sound/light/vehicles if safe; avoid cornering or separating young from adults.</li><li>If an attack occurred: Medic gives first aid and stabilises for evacuation; LC prepares a vehicle for possible medevac; no pursuit unless cleared by IC or Park Authority.</li></ul></td><td class="role">OC / Medic / Security</td><td class="confirm"><ul class="tick"><li>Animal deterred using authorised methods</li><li>Patients stabilised · transfer prepared · animal monitored</li></ul></td></tr><tr><td class="tf">15–30 min</td><td class="step">Step 6 — External support &amp; verification</td><td><ul><li>EC &amp; IC confirm with Park Rangers when the area is cleared; maintain lockdown until IC gives "All Clear."</li><li>If an attack occurred: IC liaises with Park Authority and Veterinary Unit for animal control.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>All Clear declared · authorities updated</li><li>Radio/call log maintained</li></ul></td></tr><tr><td class="tf">30–60 min</td><td class="step">Step 7 — Recovery &amp; safety sweep</td><td><ul><li>Responders (Guides &amp; Security) conduct a property sweep to ensure no remaining danger.</li><li>LC resets lighting, power, and communications.</li></ul></td><td class="role">OC / Security / LC</td><td class="confirm"><ul class="tick"><li>Property sweep completed</li></ul></td></tr><tr><td class="tf">≤ 24 hrs</td><td class="step">Step 8 — Debrief &amp; reporting</td><td><ul><li>IC debriefs the ERT within 2 hours of All Clear.</li><li>EC compiles the full report (species, time, ranger coordination, actions); conduct follow-up counselling for affected individuals.</li></ul></td><td class="role">IC / EC / All Commanders</td><td class="confirm"><ul class="tick"><li>Debrief completed · reports submitted</li><li>Follow-up counselling conducted</li></ul></td></tr></tbody></table>
@@ -1473,7 +1482,7 @@
 <section class="page" id="ckl-death">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A21 · Section 8.8</div><h2 class="pg-title">ICS Activation Checklist — Death in Camp/Lodge</h2><p class="pg-sub">Printable version of the on-screen checklist for the Death in Camp/Lodge scenario.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-death')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-death')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-death')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Check safety</td><td><ul><li>Ensure personal safety; First Aid team checks for vital signs. If none: begin CPR unless obviously deceased (rigor mortis or decapitation).</li><li>If unsuccessful after 20 minutes, confirm death and document the exact time of pronouncement. Do not move the body.</li><li>Call for help: "Code Black — [Location] — [number of persons]."</li></ul></td><td class="role">1st Responder / Medic</td><td class="confirm"><ul class="tick"><li>Personal safety ensured · scene secured</li><li>IC alerted · Medic confirms vitals</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS</td><td><ul><li>IC activates the ICT/ERT and assigns OC, LC, Medic, EC, Security Responders; EC logs time and description.</li><li>IC notifies Head Office Operations Director, local police, and (if wildlife-related) KWS/TANAPA immediately; medical evacuation service if required.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>ICT/ERT activated · death confirmed</li><li>HO informed · authorities informed</li></ul></td></tr><tr><td class="tf">3–10 min</td><td class="step">Step 3 — Scene control &amp; communication</td><td><ul><li>Secure the area, prevent unnecessary access, and cover the body respectfully. Do NOT move the body unless instructed by police or medical authorities.</li><li>EC records all communications.</li></ul></td><td class="role">OC / Security / EC</td><td class="confirm"><ul class="tick"><li>Scene sealed · guests briefed calmly</li></ul></td></tr><tr><td class="tf">10–30 min</td><td class="step">Step 4 — Coordination with authorities</td><td><ul><li>Police or park warden assumes legal control on arrival; LC prepares vehicle and documentation.</li><li>EC ensures reports are ready for handover. No photos or media are allowed.</li></ul></td><td class="role">IC / EC / LC</td><td class="confirm"><ul class="tick"><li>Police assume control · reports ready for handover</li><li>Scene restricted from media if applicable</li></ul></td></tr><tr><td class="tf">30–60 min</td><td class="step">Step 5 — Family &amp; DMC notification</td><td><ul><li>Head Office coordinates next-of-kin and embassy notifications; only a Head Office–appointed spokesperson handles media and next-of-kin.</li><li>The guest’s tour operator is informed via Head Office; manage guest relations.</li></ul></td><td class="role">IC / EC / Head Office</td><td class="confirm"><ul class="tick"><li>HO coordinates with next of kin &amp; DMC/TO</li><li>Guests kept calm and informed</li></ul></td></tr><tr><td class="tf">Within 24 hrs</td><td class="step">Step 6 — Debrief &amp; reporting</td><td><ul><li>IC leads a post-incident debrief.</li><li>EC and IC submit the Death in Camp Report and supporting documentation to Head Office within 24 hours; offer counselling to team members directly involved.</li></ul></td><td class="role">IC / EC / Medic / LC</td><td class="confirm"><ul class="tick"><li>Debrief done · report filed</li><li>Team members offered counselling</li></ul></td></tr></tbody></table>
@@ -1484,7 +1493,7 @@
 <section class="page" id="ckl-weather">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A22 · Section 8.7</div><h2 class="pg-title">ICS Activation Checklist — Severe Weather &amp; Natural Disaster</h2><p class="pg-sub">Printable version of the on-screen checklist for the Severe Weather scenario.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-weather')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-weather')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-weather')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">Pre-incident</td><td class="step">Phase 0 — Monitoring &amp; readiness</td><td><ul><li>Monitor weather advisories daily; review emergency supplies and shelter readiness.</li><li>Communicate early warnings to guests and team members.</li></ul></td><td class="role">IC / OC / LC / EC</td><td class="confirm"><ul class="tick"><li>Alert issued · resources secured</li></ul></td></tr><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Check safety</td><td><ul><li>Identify the hazard (flood, storm, earthquake, wind, lightning); alert IC: "Code Weather — [Type]."</li></ul></td><td class="role">1st Responder / Security / OC</td><td class="confirm"><ul class="tick"><li>Guests relocated · IC notified</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS / assess risk</td><td><ul><li>IC activates ERT and assigns roles; determine whether to shelter in place or evacuate; EC logs actions.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>ICT/ERT activated · HO notified</li><li>Communication functional</li></ul></td></tr><tr><td class="tf">3–10 min</td><td class="step">Step 3 — Protect guests &amp; team</td><td><ul><li>Move guests to designated safe buildings away from windows and trees; LC cuts power if flooding risk; OC confirms all zones secured.</li></ul></td><td class="role">OC / LC / Responders</td><td class="confirm"><ul class="tick"><li>Guests safe · headcount done · power off</li></ul></td></tr><tr><td class="tf">10–30 min</td><td class="step">Step 4 — Ongoing monitoring</td><td><ul><li>Monitor wind, rain, lightning changes; Medic treats minor injuries or shock; IC provides status updates to Head Office.</li></ul></td><td class="role">IC / EC / Medic</td><td class="confirm"><ul class="tick"><li>Patients stabilised · HO updated</li></ul></td></tr><tr><td class="tf">30–60 min</td><td class="step">Step 5 — Contain impact / stabilise</td><td><ul><li>Secure flooded areas and shut off utilities; check vehicle readiness for evacuation if conditions worsen.</li></ul></td><td class="role">OC / LC / IC</td><td class="confirm"><ul class="tick"><li>Flooded areas secured, power cut</li><li>Evacuation vehicles prepared</li></ul></td></tr><tr><td class="tf">After All Clear</td><td class="step">Step 6 — Recovery &amp; assessment</td><td><ul><li>Inspect for damage and safety risks; IC declares "All Clear" once confirmed safe; EC records incident timeline and cost of damage.</li></ul></td><td class="role">IC / OC / LC / EC</td><td class="confirm"><ul class="tick"><li>Safety risks cleared · All Clear declared</li></ul></td></tr><tr><td class="tf">≤ 24 hrs</td><td class="step">Step 7 — Debrief &amp; reporting</td><td><ul><li>Conduct ERT debrief within 2 hours of All Clear; EC and IC submit the Severe Weather Report to Head Office within 24 hours.</li></ul></td><td class="role">IC / EC / All Commanders</td><td class="confirm"><ul class="tick"><li>Debrief done · report sent · lessons logged</li></ul></td></tr></tbody></table>
@@ -1495,10 +1504,10 @@
 <section class="page" id="ckl-firearm">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A23 · Section 8.6</div><h2 class="pg-title">ICS Activation Checklist — Firearm / Weapon Attack</h2><p class="pg-sub">Printable version of the on-screen checklist for the Firearm / Weapon Attack scenario.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-firearm')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-firearm')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-firearm')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
-    <table class="ckl-table" style="font-size:6.9pt;"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Check safety</td><td><ul><li>If gunfire is nearby: take cover, then leave the area if safe, leaving belongings behind; move guests to safe rooms, stay low, silence phones/radios.</li><li>Detect: identify the weapon, do not approach — move to cover and alert IC/OC: "Code Security — [Location] — [Type of Threat]."</li><li>If gunmen enter camp: do NOT fight unless sure they are unarmed; follow instructions to avoid escalation; only collect information if safe to do so.</li></ul></td><td class="role">1st Responder / Security / Guide</td><td class="confirm"><ul class="tick"><li>Guests sheltered · IC notified</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS / lockdown</td><td><ul><li>IC declares "Code Security," activates ICT/ERT, assigns OC, LC, EC, Medic, Fire Marshal, Responders; OC implements lockdown of nearby buildings.</li><li>EC &amp; IC notify Head Office and Police.</li><li>Lockdown: barricade doors, stay away from sight lines, silence devices, remain quiet until instructed.</li></ul></td><td class="role">IC / OC / EC</td><td class="confirm"><ul class="tick"><li>ICT/ERT activated · HO &amp; authorities informed</li><li>Lockdown confirmed · doors barricaded · radio silence</li></ul></td></tr><tr><td class="tf">3–5 min</td><td class="step">Step 3 — Secure guests &amp; team</td><td><ul><li>Move guests to secure rooms or low ground away from windows; turn off lights and keep silent.</li><li>LC turns off non-essential power sources.</li></ul></td><td class="role">OC / Responders</td><td class="confirm"><ul class="tick"><li>Lights &amp; non-essential power off</li></ul></td></tr><tr><td class="tf">5–10 min</td><td class="step">Step 4 — Communication &amp; coordination</td><td><ul><li>IC &amp; EC alert police/authorities on secure channels; use pre-assigned radio codes, avoid mentioning guest locations.</li><li>IC &amp; EC inform neighbouring premises if safe; only GM (IC) or Operations Director speak externally; EC logs timeline and guest accountability.</li></ul></td><td class="role">IC / EC / Police / Fire Marshal</td><td class="confirm"><ul class="tick"><li>Authorities &amp; HO updated</li><li>Neighbouring properties informed · guests accounted for</li></ul></td></tr><tr><td class="tf">10–20 min</td><td class="step">Step 5 — Contain / neutralise threat</td><td><ul><li>When police/responders arrive, follow instructions, keep hands visible, avoid sudden movements, stay silent unless addressed.</li><li>Police/Rangers assume control; OC assists with site maps; LC keeps vehicles ready for medical support.</li></ul></td><td class="role">IC / Police / OC</td><td class="confirm"><ul class="tick"><li>Police assume control · site maps handed over</li><li>Support transfers arranged</li></ul></td></tr><tr><td class="tf">20–30 min</td><td class="step">Step 6 — Medical response &amp; evacuation</td><td><ul><li>Evacuate only when police/responders declare the area safe; move quickly to assembly points under supervision.</li><li>Medic attends to the injured; LC prepares medevac route; IC authorises external communication to families via Head Office.</li></ul></td><td class="role">Medic / LC / IC / OC</td><td class="confirm"><ul class="tick"><li>Evacuate when instructed · patients stabilised</li><li>Medevac prepared if authorised · HO informed families</li></ul></td></tr><tr><td class="tf">30–60 min</td><td class="step">Step 7 — All clear / scene security</td><td><ul><li>Authorities declare "Safe to Move"; OC supervises a property sweep for weapons or suspects; IC announces "All Clear."</li></ul></td><td class="role">IC / Authorities / OC</td><td class="confirm"><ul class="tick"><li>Area cleared · property sweep completed</li><li>All Clear declared</li></ul></td></tr><tr><td class="tf">≤ 24 hrs</td><td class="step">Step 8 — Debrief &amp; reporting</td><td><ul><li>Conduct ERT debrief within 2 hours; EC submits the Firearm/Weapon Incident Report to Head Office within 24 hours.</li><li>Schedule counselling for affected team members and guests.</li></ul></td><td class="role">IC / EC / All Commanders</td><td class="confirm"><ul class="tick"><li>Debrief completed · report submitted</li><li>Counselling scheduled</li></ul></td></tr></tbody></table>
+    <table class="ckl-table" style="font-size:6.9pt;"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Check safety</td><td><ul><li>If gunfire is nearby: take cover, then leave the area if safe, leaving belongings behind; move guests to safe rooms, stay low, silence phones/radios.</li><li>Detect: identify the weapon, do not approach — move to cover and alert IC/OC: "Code Security — [Location] — [Type of Threat]."</li><li>If gunmen enter camp: do NOT fight unless sure they are unarmed; follow instructions to avoid escalation; only collect information if safe to do so.</li></ul></td><td class="role">1st Responder / Security / Guide</td><td class="confirm"><ul class="tick"><li>Guests sheltered · IC notified</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS / lockdown</td><td><ul><li>IC declares "Code Security," activates ICT/ERT, assigns OC, LC, EC, Medic, Fire Marshal, Responders; OC implements lockdown of nearby buildings.</li><li>EC &amp; IC notify Head Office and Police.</li><li>Lockdown: barricade doors, stay away from sight lines, silence devices, remain quiet until instructed.</li></ul></td><td class="role">IC / OC / EC</td><td class="confirm"><ul class="tick"><li>ICT/ERT activated · HO &amp; authorities informed</li><li>Lockdown confirmed · doors barricaded · radio silence</li></ul></td></tr><tr><td class="tf">3–5 min</td><td class="step">Step 3 — Secure guests &amp; team</td><td><ul><li>Move guests to secure rooms or low ground away from windows; turn off lights and keep silent.</li><li>LC turns off non-essential power sources.</li></ul></td><td class="role">OC / Responders</td><td class="confirm"><ul class="tick"><li>Lights &amp; non-essential power off</li></ul></td></tr><tr><td class="tf">5–10 min</td><td class="step">Step 4 — Communication &amp; coordination</td><td><ul><li>IC &amp; EC alert police/authorities on secure channels; use pre-assigned radio codes, avoid mentioning guest locations.</li><li>IC &amp; EC inform neighbouring premises if safe. Operational contact with Police and authorities is coordinated through the IC and EC; media and public enquiries are referred to the Head Office-appointed spokesperson (Section 7.4). The Section 7.2 immediate life-safety external-call exception remains applicable. EC logs timeline and guest accountability.</li></ul></td><td class="role">IC / EC / Police / Fire Marshal</td><td class="confirm"><ul class="tick"><li>Authorities &amp; HO updated</li><li>Neighbouring properties informed · guests accounted for</li></ul></td></tr><tr><td class="tf">10–20 min</td><td class="step">Step 5 — Contain / neutralise threat</td><td><ul><li>When police/responders arrive, follow instructions, keep hands visible, avoid sudden movements, stay silent unless addressed.</li><li>Police/Rangers assume control; OC assists with site maps; LC keeps vehicles ready for medical support.</li></ul></td><td class="role">IC / Police / OC</td><td class="confirm"><ul class="tick"><li>Police assume control · site maps handed over</li><li>Support transfers arranged</li></ul></td></tr><tr><td class="tf">20–30 min</td><td class="step">Step 6 — Medical response &amp; evacuation</td><td><ul><li>Evacuate only when police/responders declare the area safe; move quickly to assembly points under supervision.</li><li>Medic attends to the injured; LC prepares medevac route; IC authorises external communication to families via Head Office.</li></ul></td><td class="role">Medic / LC / IC / OC</td><td class="confirm"><ul class="tick"><li>Evacuate when instructed · patients stabilised</li><li>Medevac prepared if authorised · HO informed families</li></ul></td></tr><tr><td class="tf">30–60 min</td><td class="step">Step 7 — All clear / scene security</td><td><ul><li>Authorities declare "Safe to Move"; OC supervises a property sweep for weapons or suspects; IC announces "All Clear."</li></ul></td><td class="role">IC / Authorities / OC</td><td class="confirm"><ul class="tick"><li>Area cleared · property sweep completed</li><li>All Clear declared</li></ul></td></tr><tr><td class="tf">≤ 24 hrs</td><td class="step">Step 8 — Debrief &amp; reporting</td><td><ul><li>Conduct ERT debrief within 2 hours; EC submits the Firearm/Weapon Incident Report to Head Office within 24 hours.</li><li>Schedule counselling for affected team members and guests.</li></ul></td><td class="role">IC / EC / All Commanders</td><td class="confirm"><ul class="tick"><li>Debrief completed · report submitted</li><li>Counselling scheduled</li></ul></td></tr></tbody></table>
   </div>
   <div class="pg-foot"><span>Elewana Collection · GEN PROP 01</span><span>A23 — ICS Activation Checklist (Firearm/Weapon)</span></div>
 </section>
@@ -1506,7 +1515,7 @@
 <section class="page" id="ckl-bomb">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A24 · Section 8.5</div><h2 class="pg-title">ICS Activation Checklist — Bomb Threat</h2><p class="pg-sub">Printable version of the on-screen checklist for the Bomb Threat scenario.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-bomb')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-bomb')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-bomb')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Check safety</td><td><ul><li>Stay calm, keep the caller talking; note voice, words, and background sounds; record the message verbatim on the Bomb Threat Information Sheet.</li><li>Alert IC &amp; OC immediately.</li></ul></td><td class="role">1st Responder / Security / Reception</td><td class="confirm"><ul class="tick"><li>Info logged · IC alerted</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS</td><td><ul><li>IC declares "Code Threat," activates ICT/ERT, assigns OC, LC, EC, Medic, Security Responders.</li><li>EC logs all details including caller number or location.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>ICT/ERT activated · HO &amp; authorities informed if needed</li></ul></td></tr><tr><td class="tf">3–5 min</td><td class="step">Step 3 — Identify &amp; isolate area</td><td><ul><li>Do NOT touch or move suspicious items; clear the immediate area and set a 50 m exclusion zone.</li><li>LC disables radios and Wi-Fi within the zone.</li></ul></td><td class="role">OC / Security / LC</td><td class="confirm"><ul class="tick"><li>50 m area cleared · Wi-Fi/radios disabled</li></ul></td></tr><tr><td class="tf">5–10 min</td><td class="step">Step 4 — Evacuate &amp; account for guests</td><td><ul><li>Under OC supervision, Responders direct guests and team to the safe Assembly Point calmly.</li><li>OC oversees HODs conducting roll call; keep guests informed and reassured.</li></ul></td><td class="role">OC / Security / HODs</td><td class="confirm"><ul class="tick"><li>Guests &amp; team evacuated if needed</li><li>Headcount conducted</li></ul></td></tr><tr><td class="tf">10–15 min</td><td class="step">Step 5 — External notification</td><td><ul><li>Contact Police / Bomb Disposal / Park Authorities; provide a map of the area and access routes.</li><li>IC notifies Head Office immediately.</li></ul></td><td class="role">IC &amp; EC</td><td class="confirm"><ul class="tick"><li>Police &amp; authorities informed · area map located</li><li>HO updated</li></ul></td></tr><tr><td class="tf">15–30 min</td><td class="step">Step 6 — Maintain scene security</td><td><ul><li>Prevent re-entry until authorities arrive; maintain perimeter and await clearance.</li><li>LC positions vehicles for rapid evacuation if needed.</li></ul></td><td class="role">OC / Security / LC</td><td class="confirm"><ul class="tick"><li>Police on-site · perimeter maintained until All Clear</li></ul></td></tr><tr><td class="tf">30–60 min</td><td class="step">Step 7 — Official clearance</td><td><ul><li>Assist Police and Bomb Squad with information; do not remove or photograph evidence.</li><li>IC declares "All Clear" after written confirmation from authorities.</li></ul></td><td class="role">IC / Authorities</td><td class="confirm"><ul class="tick"><li>Police handover complete · All Clear given · HO updated</li></ul></td></tr><tr><td class="tf">≤ 24 hrs</td><td class="step">Step 8 — Debrief &amp; reporting</td><td><ul><li>Conduct ERT debrief within 2 hours of clearance.</li><li>EC &amp; IC submit the Bomb Threat Report to Head Office within 24 hours; review response effectiveness.</li></ul></td><td class="role">IC / EC / All Commanders</td><td class="confirm"><ul class="tick"><li>Debrief held · report filed · response reviewed</li></ul></td></tr></tbody></table>
@@ -1517,7 +1526,7 @@
 <section class="page" id="ckl-chemical">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A25 · Section 8.4</div><h2 class="pg-title">ICS Activation Checklist — Chemical Spill</h2><p class="pg-sub">Printable version of the on-screen checklist for the Chemical Spill scenario.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-chemical')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-chemical')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-chemical')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Check safety</td><td><ul><li>1st Responder identifies the type of spill (fuel, detergent, acid, cleaning agent); raise the alarm: "Code Hazard — [Location] — [Substance if known]."</li><li>Keep a safe distance, avoid contact, do not enter the vapour area.</li></ul></td><td class="role">1st Responder / Security / Maintenance</td><td class="confirm"><ul class="tick"><li>Evacuation done · scene secured</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS</td><td><ul><li>IC activates ICT/ERT, assigns OC, LC, Medic, establishes a safe Command Post; EC logs activation and initial report.</li><li>IC notifies Head Office Operations and Fire Dept if needed; OC/LC deploy with PPE and spill-control kits.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>ICT/ERT activated · HO/authorities informed</li><li>PPE distributed</li></ul></td></tr><tr><td class="tf">3–5 min</td><td class="step">Step 3 — Secure &amp; contain area</td><td><ul><li>Evacuate the area, ventilate, eliminate ignition sources, wear PPE before entry.</li><li>OC sets a minimum 10 m exclusion perimeter; LC cuts power/gas and posts hazard signage; Responders stop drainage flow with sand/absorbent barriers.</li></ul></td><td class="role">OC / LC / Responders</td><td class="confirm"><ul class="tick"><li>Exclusion perimeter set · power/gas disconnected</li><li>Hazard signage &amp; absorbent barriers in place</li></ul></td></tr><tr><td class="tf">5–10 min</td><td class="step">Step 4 — Containment &amp; PPE</td><td><ul><li>Responders identify chemical type/quantity, consult the SDS before containment/cleanup; neutralise only per SDS — never guess.</li><li>OC evacuates non-essential personnel if fumes/fire risk present; do NOT wash spills into drains.</li></ul></td><td class="role">OC / LC</td><td class="confirm"><ul class="tick"><li>Chemical identified &amp; contained per SDS</li><li>Immediate hazard determined · non-essential staff evacuated</li></ul></td></tr><tr><td class="tf">10–15 min</td><td class="step">Step 5 — Communication</td><td><ul><li>IC updates Head Office and the relevant authority (Environmental/Park); EC logs material name, supplier, and MSDS.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>HO &amp; authorities updated</li></ul></td></tr><tr><td class="tf">15–30 min</td><td class="step">Step 6 — Clean-up / decontamination</td><td><ul><li>LC provides absorbent materials/neutralisers/sand; OC oversees to prevent drainage into waterways or soil.</li><li>Trained Responders wear full PPE, package waste per SDS, and dispose via approved procedures; Medic treats exposed persons.</li></ul></td><td class="role">OC / LC / Medic</td><td class="confirm"><ul class="tick"><li>Correct clean-up material used per SDS</li><li>Waste packaged, recorded &amp; disposed correctly · patients treated</li></ul></td></tr><tr><td class="tf">30–60 min</td><td class="step">Step 7 — Recovery &amp; testing</td><td><ul><li>Verify all residues removed and area ventilated; IC announces "All Clear" after OC/LC verification.</li><li>EC &amp; IC compile the Chemical Spill Incident Report with actions, materials, and photos within 24 hours; reconnect power only after IC authorisation.</li></ul></td><td class="role">IC / OC / LC</td><td class="confirm"><ul class="tick"><li>Area ventilated, residue removed · All Clear declared</li><li>Power reconnected · materials stored &amp; labelled</li></ul></td></tr><tr><td class="tf">≤ 24 hrs</td><td class="step">Step 8 — Debrief &amp; reporting</td><td><ul><li>IC leads a debrief within 2 hours of resolution; EC &amp; IC submit the report with photos and material details within 24 hours.</li><li>Update the chemical register and safety data files; restock PPE and spill kits.</li></ul></td><td class="role">IC / EC / All Commanders</td><td class="confirm"><ul class="tick"><li>Debrief completed · report submitted</li><li>PPE &amp; spill kits restocked</li></ul></td></tr></tbody></table>
@@ -1528,7 +1537,7 @@
 <section class="page" id="ckl-shutdown">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A26 · Section 10</div><h2 class="pg-title">ICS Activation Checklist — Country Shutdown / Movement Restriction</h2><p class="pg-sub">Phase 1 — Immediate Action (0–6 hours). Secure communications, staff, guests, fuel, and power.</p></div><div class="pg-ref">Page 1 of 3</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-shutdown')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-shutdown')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-shutdown')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Step</th><th>Phase</th><th>Action</th><th>Responsible</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">1</td><td class="step">Phase 1</td><td><ul><li>Confirm the national restriction announcement with Head Office and authorities (radio/satellite).</li></ul></td><td class="role">IC (GM/AGM)</td><td class="confirm"><ul class="tick"><li>Government announcement verified</li><li>Communication established with HO</li></ul></td></tr><tr><td class="tf">2</td><td class="step">Phase 1</td><td><ul><li>Activate the Incident Command Team and assign roles: OC (Maintenance Manager), LC (Executive Chef), EC (Front Office Manager), Medic (Nurse/First Aider), Responders (HODs/Security).</li></ul></td><td class="role">IC</td><td class="confirm"><ul class="tick"><li>ICT activated · roles assigned</li><li>ICS board updated and displayed</li></ul></td></tr><tr><td class="tf">3</td><td class="step">Phase 1</td><td><ul><li>Conduct a staff briefing — emphasise calm, discipline, and task assignments.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>Staff briefed · comms log updated</li></ul></td></tr><tr><td class="tf">4</td><td class="step">Phase 1</td><td><ul><li>Inform guests clearly and calmly; explain safety measures and the limited operations plan.</li></ul></td><td class="role">EC / FO Manager</td><td class="confirm"><ul class="tick"><li>Guests informed · comms log updated</li></ul></td></tr><tr><td class="tf">5</td><td class="step">Phase 1</td><td><ul><li>Assess and secure 14 days of fuel stock for generator and vehicles.</li></ul></td><td class="role">OC / LC</td><td class="confirm"><ul class="tick"><li>Stock levels confirmed · generator fuelled</li></ul></td></tr><tr><td class="tf">6</td><td class="step">Phase 1</td><td><ul><li>Limit generator use to essential hours (05:00–09:00 / 17:00–23:00).</li></ul></td><td class="role">OC</td><td class="confirm"><ul class="tick"><li>New schedule displayed · staff informed</li></ul></td></tr><tr><td class="tf">7</td><td class="step">Phase 1</td><td><ul><li>Check generator oil, filters, and backup batteries.</li></ul></td><td class="role">OC</td><td class="confirm"><ul class="tick"><li>Maintenance completed · system functional</li></ul></td></tr><tr><td class="tf">8</td><td class="step">Phase 1</td><td><ul><li>Limit vehicle movement strictly to emergency use, medical evacuation, or essential supply runs once cleared by authorities.</li></ul></td><td class="role">OC</td><td class="confirm"><ul class="tick"><li>Vehicle movement limited</li></ul></td></tr><tr><td class="tf">9</td><td class="step">Phase 1</td><td><ul><li>Fill all water tanks and ensure treatment systems are running.</li></ul></td><td class="role">OC / Housekeeping</td><td class="confirm"><ul class="tick"><li>Tanks full · water treatment confirmed</li></ul></td></tr><tr><td class="tf">10</td><td class="step">Phase 1</td><td><ul><li>Initiate the Emergency Communication Chain (IC → Head Office → Park Authority → DMCs).</li></ul></td><td class="role">EC</td><td class="confirm"><ul class="tick"><li>Chain activated · contact log started</li></ul></td></tr></tbody></table>
@@ -1538,7 +1547,7 @@
 
 <section class="page" id="ckl-shutdown-2">
   <div class="pg-head"><div><div class="pg-eyebrow">A26 · Section 10</div><h2 class="pg-title">ICS Activation Checklist — Country Shutdown / Movement Restriction (cont.)</h2><p class="pg-sub">Phase 2 — Stabilisation (6–24 hours). Secure supplies and maintain operational sustainability for 14 days.</p></div><div class="pg-ref">Page 2 of 3</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-shutdown-2')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-shutdown-2')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-shutdown-2')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Step</th><th>Phase</th><th>Action</th><th>Responsible</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">1</td><td class="step">Phase 2</td><td><ul><li>Conduct a full Food &amp; Beverage inventory (dry, chilled, frozen).</li></ul></td><td class="role">LC / Executive Chef</td><td class="confirm"><ul class="tick"><li>Stock counted · inventory sheet signed</li></ul></td></tr><tr><td class="tf">2</td><td class="step">Phase 2</td><td><ul><li>Develop a 14-day ration plan with perishable-use priority and portion control.</li></ul></td><td class="role">LC</td><td class="confirm"><ul class="tick"><li>Ration plan posted in kitchen</li></ul></td></tr><tr><td class="tf">3</td><td class="step">Phase 2</td><td><ul><li>Freeze perishable proteins and vacuum-seal fresh produce.</li></ul></td><td class="role">LC</td><td class="confirm"><ul class="tick"><li>Frozen items logged · vacuum sealing done</li></ul></td></tr><tr><td class="tf">4</td><td class="step">Phase 2</td><td><ul><li>Review daily fuel and generator consumption; report to IC.</li></ul></td><td class="role">OC / EC</td><td class="confirm"><ul class="tick"><li>Consumption log submitted</li></ul></td></tr><tr><td class="tf">5</td><td class="step">Phase 2</td><td><ul><li>Maintain a 50% reserve fuel threshold for emergencies.</li></ul></td><td class="role">OC</td><td class="confirm"><ul class="tick"><li>Reserve secured · stock check signed</li></ul></td></tr><tr><td class="tf">6</td><td class="step">Phase 2</td><td><ul><li>Under IC direction, Housekeeping implements a linen rotation plan — reduce daily changes unless necessary.</li></ul></td><td class="role">IC / Housekeeping</td><td class="confirm"><ul class="tick"><li>Linen log implemented</li></ul></td></tr><tr><td class="tf">7</td><td class="step">Phase 2</td><td><ul><li>Verify the First Aid kit, medical supplies, and expiry dates.</li></ul></td><td class="role">Medic</td><td class="confirm"><ul class="tick"><li>Kit restocked · expiry checked</li></ul></td></tr><tr><td class="tf">8</td><td class="step">Phase 2</td><td><ul><li>Identify the nearest medevac airstrip and confirm contact with the Ranger Post, under IC/EC direction.</li></ul></td><td class="role">Medic / EC / IC</td><td class="confirm"><ul class="tick"><li>Airstrip confirmed · radio/satellite phones tested</li></ul></td></tr><tr><td class="tf">9</td><td class="step">Phase 2</td><td><ul><li>Prepare a Staff Food Plan for 14 days; secure dry rations.</li></ul></td><td class="role">LC</td><td class="confirm"><ul class="tick"><li>Staff kitchen stocked</li></ul></td></tr><tr><td class="tf">10</td><td class="step">Phase 2</td><td><ul><li>Implement staff shift rotations and designate a morale officer.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>Shifts posted · morale officer assigned</li></ul></td></tr></tbody></table>
@@ -1548,7 +1557,7 @@
 
 <section class="page" id="ckl-shutdown-3">
   <div class="pg-head"><div><div class="pg-eyebrow">A26 · Section 10</div><h2 class="pg-title">ICS Activation Checklist — Country Shutdown / Movement Restriction (cont.)</h2><p class="pg-sub">Phase 3 — Operational Stability (Days 2–14) and Phase 4 — Recovery &amp; Reporting (post-restriction).</p></div><div class="pg-ref">Page 3 of 3</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-shutdown-3')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-shutdown-3')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-shutdown-3')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Step</th><th>Phase</th><th>Action</th><th>Responsible</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">1</td><td class="step">Phase 3</td><td><ul><li>Continue twice-daily communication with Head Office (AM &amp; PM).</li></ul></td><td class="role">EC</td><td class="confirm"><ul class="tick"><li>Logs completed</li></ul></td></tr><tr><td class="tf">2</td><td class="step">Phase 3</td><td><ul><li>Conduct daily staff and guest briefings with verified updates only.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>Briefing done · log signed</li></ul></td></tr><tr><td class="tf">3</td><td class="step">Phase 3</td><td><ul><li>Provide in-lodge guest engagement activities (nature walks, stargazing, lectures).</li></ul></td><td class="role">OC / Guides</td><td class="confirm"><ul class="tick"><li>Guest morale maintained</li></ul></td></tr><tr><td class="tf">4</td><td class="step">Phase 3</td><td><ul><li>Maintain 24-hour security at gates and boundaries; limit access to authorised personnel only.</li></ul></td><td class="role">OC / Security</td><td class="confirm"><ul class="tick"><li>Patrol roster active</li></ul></td></tr><tr><td class="tf">5</td><td class="step">Phase 3</td><td><ul><li>Restrict vehicle use to emergency or medical response; uphold linen rotation and reduced laundry.</li></ul></td><td class="role">IC / OC / Housekeeping</td><td class="confirm"><ul class="tick"><li>Usage log approved · linen log updated</li></ul></td></tr><tr><td class="tf">6</td><td class="step">Phase 3</td><td><ul><li>Separate and reduce waste; dispose safely to prevent wildlife attraction.</li></ul></td><td class="role">OC / Housekeeping</td><td class="confirm"><ul class="tick"><li>Waste managed safely</li></ul></td></tr><tr><td class="tf">7</td><td class="step">Phase 3</td><td><ul><li>Record the Daily SITREP: fuel, food, water, power, and staff status.</li></ul></td><td class="role">EC</td><td class="confirm"><ul class="tick"><li>SITREP filed daily</li></ul></td></tr><tr><td class="tf">1</td><td class="step">Phase 4</td><td><ul><li>Conduct an audit of fuel, food, and housekeeping supplies; place restocking orders.</li></ul></td><td class="role">LC / OC</td><td class="confirm"><ul class="tick"><li>Audit report completed · orders sent</li></ul></td></tr><tr><td class="tf">2</td><td class="step">Phase 4</td><td><ul><li>Resume full generator and housekeeping operations.</li></ul></td><td class="role">OC / Housekeeping</td><td class="confirm"><ul class="tick"><li>Systems normalised</li></ul></td></tr><tr><td class="tf">3</td><td class="step">Phase 4</td><td><ul><li>Hold a full staff debrief &amp; recognition session to discuss lessons learned.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>Debrief held · attendance signed</li></ul></td></tr><tr><td class="tf">4</td><td class="step">Phase 4</td><td><ul><li>Submit a Post-Shutdown Report to Head Office within 48 hours (duration, inventories, guest issues, incidents, recommendations).</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>Report submitted</li></ul></td></tr><tr><td class="tf">5</td><td class="step">Phase 4</td><td><ul><li>Conduct emotional support or counselling for staff who experienced stress or isolation.</li></ul></td><td class="role">IC / Medic</td><td class="confirm"><ul class="tick"><li>Well-being check done</li></ul></td></tr><tr><td class="tf">6</td><td class="step">Phase 4</td><td><ul><li>File and store all documentation: communication logs, SITREPs, generator log, food stock sheet, and Post-Shutdown Report.</li></ul></td><td class="role">EC</td><td class="confirm"><ul class="tick"><li>Documents archived</li></ul></td></tr></tbody></table>
@@ -1559,7 +1568,7 @@
 <section class="page" id="fnb-stock-sheet">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A44 · Section 10</div><h2 class="pg-title">F&amp;B Stock Sheet</h2><p class="pg-sub">Complete every 3 days during a country shutdown or movement restriction, and whenever a resupply run is not possible. File with the SITREP.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('fnb-stock-sheet')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('fnb-stock-sheet')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('fnb-stock-sheet')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8.3pt;">
     <div class="grid3" style="margin-bottom:.14in;">
@@ -1609,7 +1618,7 @@
 <section class="page" id="generator-fuel-register">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">Property Record · Section 10 (Level 1–3)</div><h2 class="pg-title">Generator &amp; Fuel Stock Sheet</h2><p class="pg-sub">Property-specific record — not a controlled Group form (no A-code assigned). Complete daily during a country shutdown or movement restriction; kept by the Maintenance HOD and signed off by the Operations Commander per the controlled handbook.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('generator-fuel-register')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('generator-fuel-register')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('generator-fuel-register')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8.3pt;">
     <div class="grid3" style="margin-bottom:.14in;">
@@ -1658,7 +1667,7 @@
 <section class="page" id="ckl-balloon">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A27 · Section 8.12</div><h2 class="pg-title">ICS Activation Checklist — Hot Air Balloon Incidents</h2><p class="pg-sub">Printable checklist for a hard landing, in-flight emergency, or ground crew incident during a balloon safari.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-balloon')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-balloon')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-balloon')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Alert</td><td><ul><li>The pilot radios the balloon operator’s ground crew as soon as an in-flight problem or hard landing occurs, giving location, guest numbers, and injuries if known.</li><li>The ground crew or lodge duty manager radios the Incident Commander: "Code Balloon — [location if known] — [number of guests]."</li><li>Note the balloon’s last known position, direction of travel, and estimated landing area.</li></ul></td><td class="role">Balloon Pilot / Ground Crew / Duty Manager</td><td class="confirm"><ul class="tick"><li>Location &amp; guest count relayed</li><li>IC alerted</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS</td><td><ul><li>IC starts the team and assigns OC, LC, Medic, Responders.</li><li>EC logs the time and known details; IC notifies the balloon operator’s head office and Head Office.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>ICT activated, roles assigned</li><li>HO &amp; balloon operator notified</li></ul></td></tr><tr><td class="tf">3–10 min</td><td class="step">Step 3 — Reach the site</td><td><ul><li>The balloon operator’s chase vehicles are usually first on scene — OC coordinates with them; lodge vehicles go only if requested or closer.</li><li>LC prepares a vehicle with first aid kit, stretcher, and water, and gets exact GPS coordinates before departure.</li><li>Do not approach the balloon or basket until the pilot confirms it is safe — burner and envelope can remain hazardous.</li></ul></td><td class="role">OC / LC / Ground Crew</td><td class="confirm"><ul class="tick"><li>GPS coordinates confirmed</li><li>Vehicle dispatched with medical kit</li></ul></td></tr><tr><td class="tf">10–20 min</td><td class="step">Step 4 — Medical assessment</td><td><ul><li>Medic checks every guest and crew member for injury, even if no one reports pain — hard landings can cause spinal or internal injuries that aren’t immediately obvious.</li><li>If seriously injured, follow the Medical Emergencies checklist for evacuation and contact AMREF/Flying Doctors immediately.</li></ul></td><td class="role">Medic / Balloon Pilot / Ground Crew</td><td class="confirm"><ul class="tick"><li>All guests &amp; crew checked</li><li>Evacuation initiated if required</li></ul></td></tr><tr><td class="tf">20–60 min</td><td class="step">Step 5 — Guest care &amp; transport</td><td><ul><li>For uninjured guests, arrange transport back to the property; offer to contact family or their tour operator if they’d like reassurance sent.</li><li>The park or aviation authority may need to be informed, depending on severity — IC confirms with the balloon operator.</li></ul></td><td class="role">OC / LC / IC</td><td class="confirm"><ul class="tick"><li>Guests transported · families/operator contacted if requested</li><li>Authorities informed if required</li></ul></td></tr><tr><td class="tf">Within 24 hrs</td><td class="step">Step 6 — Debrief &amp; reporting</td><td><ul><li>IC debriefs with the balloon operator and property team within 2 hours.</li><li>EC submits the Balloon Incident Report to Head Office within 24 hours and coordinates with the balloon operator’s own incident reporting.</li></ul></td><td class="role">IC / EC</td><td class="confirm"><ul class="tick"><li>Debrief done · report submitted</li></ul></td></tr></tbody></table>
@@ -1669,7 +1678,7 @@
 <section class="page" id="ckl-aquatic">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A28 · Section 8.10</div><h2 class="pg-title">ICS Activation Checklist — Water &amp; Aquatic Safety</h2><p class="pg-sub">Printable checklist for drowning, near-drowning, and water or boat incidents.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-aquatic')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-aquatic')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-aquatic')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–1 min</td><td class="step">Step 1 — Raise the alarm</td><td><ul><li>Shout for help and radio: "Code Water — [location]."</li><li>Ensure rescuer safety — reach or throw, do NOT go in unless trained and safe. Use a reach pole, ring buoy, or throw line.</li><li>From a boat, throw flotation and keep the casualty in sight at all times.</li></ul></td><td class="role">1st Responder / Guide / Boat Crew</td><td class="confirm"><ul class="tick"><li>Alarm raised · rescuer safety ensured</li></ul></td></tr><tr><td class="tf">1–3 min</td><td class="step">Step 2 — Activate ICS &amp; retrieve</td><td><ul><li>IC activates the team; Medic moves to the scene.</li><li>OC controls bystanders and ensures safe retrieval from the water.</li><li>Suspect spinal injury if diving or a fall was involved — support the head and neck, keep the person horizontal.</li></ul></td><td class="role">IC / OC / Medic</td><td class="confirm"><ul class="tick"><li>Team activated · casualty retrieved safely</li></ul></td></tr><tr><td class="tf">3–5 min</td><td class="step">Step 3 — Resuscitation (ABC)</td><td><ul><li>Check response and breathing. If not breathing: 5 initial rescue breaths, then CPR at 30:2; use an AED as soon as available (dry the chest first).</li><li>Place a breathing, unconscious casualty in the recovery position; treat catastrophic bleeding or spinal injury as indicated.</li></ul></td><td class="role">Medic / Responders</td><td class="confirm"><ul class="tick"><li>Casualty breathing/CPR status confirmed</li><li>AED used if available</li></ul></td></tr><tr><td class="tf">5–10 min</td><td class="step">Step 4 — Stabilise &amp; prepare evac</td><td><ul><li>Administer oxygen if trained and available; manage hypothermia — remove wet clothing, warm and insulate, treat for shock.</li><li>LC prepares the vehicle or boat; EC contacts medical or medevac services on IC’s instruction.</li></ul></td><td class="role">Medic / LC / EC</td><td class="confirm"><ul class="tick"><li>Hypothermia/shock managed</li><li>Transport &amp; medevac contact prepared</li></ul></td></tr><tr><td class="tf">10–30 min</td><td class="step">Step 5 — Evacuation / transfer</td><td><ul><li>Evacuate per the Medical Emergency protocol — road or air evacuation as authorised by IC.</li><li>Medic monitors vitals continuously; EC logs departure time and destination.</li></ul></td><td class="role">IC / Medic / LC / EC</td><td class="confirm"><ul class="tick"><li>Evacuation authorised &amp; logged</li></ul></td></tr><tr><td class="tf">Within 24 hrs</td><td class="step">Step 6 — Debrief &amp; reporting</td><td><ul><li>ERT debriefs within 2 hours; EC and IC submit the Incident Report within 24 hours.</li><li>Review supervision, equipment, and prevention; restock and check rescue and medical equipment.</li><li>Note: any near-drowning guest must be medically assessed even if they appear fine — arrange evaluation and do not leave them unobserved (secondary drowning).</li></ul></td><td class="role">IC / EC / All Commanders</td><td class="confirm"><ul class="tick"><li>Debrief done · report submitted</li><li>Equipment restocked</li></ul></td></tr></tbody></table>
@@ -1680,7 +1689,7 @@
 <section class="page" id="ckl-missing">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A29 · Section 8.9</div><h2 class="pg-title">ICS Activation Checklist — Missing Person / Lost Guest</h2><p class="pg-sub">Printable checklist for a guest, team member, or child who is unaccounted for.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-missing')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-missing')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-missing')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody><tr><td class="tf">0–5 min</td><td class="step">Step 1 — Confirm &amp; alert</td><td><ul><li>Confirm the person is genuinely unaccounted for; gather last-seen time, location, description, clothing, medical condition, likely intentions.</li><li>Radio: "Code Missing — [name/description] — [last seen]." Alert IC and OC. If a child or anyone near water is missing, check all water features FIRST.</li></ul></td><td class="role">1st Responder / Reception / Guide</td><td class="confirm"><ul class="tick"><li>Last-seen details gathered</li><li>IC &amp; OC alerted · water features checked first</li></ul></td></tr><tr><td class="tf">5–15 min</td><td class="step">Step 2 — Activate ICS &amp; headcount</td><td><ul><li>IC activates the team; OC becomes Search Coordinator; LC readies vehicles, torches, radios; EC opens the Search Log.</li><li>Conduct a full headcount of guests and team; check the missing person’s room/tent, common areas, vehicles, pool, perimeter; establish a Command Post.</li></ul></td><td class="role">IC / OC / EC</td><td class="confirm"><ul class="tick"><li>Team activated, Search Log opened</li><li>Headcount complete · Command Post established</li></ul></td></tr><tr><td class="tf">15–30 min</td><td class="step">Step 3 — Systematic search</td><td><ul><li>OC assigns sectors and launches a systematic search outward from the last-known point (concentric or grid pattern).</li><li>Searchers work in pairs, never alone, with radios; check water, vehicles, store rooms, walkways, perimeter fence; mark cleared areas.</li></ul></td><td class="role">OC / Searchers</td><td class="confirm"><ul class="tick"><li>Sectors assigned · areas marked as cleared</li></ul></td></tr><tr><td class="tf">30–60 min</td><td class="step">Step 4 — Escalate</td><td><ul><li>If not located, IC notifies Park Rangers (KWS/TANAPA) and requests manpower, tracking, aircraft if available; notifies Head Office; considers neighbouring camps.</li><li>EC logs all calls; reassess and widen the search area, planning for terrain, water, and wildlife.</li></ul></td><td class="role">IC / EC / Park Authority</td><td class="confirm"><ul class="tick"><li>Park Authority &amp; HO notified</li><li>Search area widened, call log kept</li></ul></td></tr><tr><td class="tf">60 min+</td><td class="step">Step 5 — Sustained / night search</td><td><ul><li>Move to managed search operations — defined shifts, a lighting plan, vehicle sweeps with spotlights, sound signals.</li><li>Night searches require an armed escort and no lone searchers due to wildlife risk; authorities lead the search once engaged.</li></ul></td><td class="role">IC / OC / LC / Authorities</td><td class="confirm"><ul class="tick"><li>Shift plan &amp; lighting in place</li><li>No lone searchers · authorities leading if engaged</li></ul></td></tr><tr><td class="tf">On location</td><td class="step">Step 6 — Recovery &amp; care</td><td><ul><li>On finding the person, Medic assesses and treats for exposure, dehydration, injury, or shock.</li><li>Evacuate per the Medical Emergencies checklist if required; account for and stand down searchers safely, reassure and reunite everyone.</li></ul></td><td class="role">Medic / OC / LC</td><td class="confirm"><ul class="tick"><li>Person assessed &amp; treated</li><li>Searchers accounted for and stood down</li></ul></td></tr><tr><td class="tf">Within 24 hrs</td><td class="step">Step 7 — Debrief &amp; reporting</td><td><ul><li>ERT debriefs within 2 hours of standing down.</li><li>EC and IC complete the Missing Person Search Log and Incident Report within 24 hours; review prevention (headcounts, escort procedure, briefings) and offer counselling if needed.</li></ul></td><td class="role">IC / EC / All Commanders</td><td class="confirm"><ul class="tick"><li>Debrief done · Search Log &amp; report completed</li><li>Prevention reviewed</li></ul></td></tr></tbody></table>
@@ -1691,7 +1700,7 @@
 <section class="page" id="snakebite-guide">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A30 · Section 8.1 / 8.3</div><h2 class="pg-title">Snakebite Quick Guide</h2><p class="pg-sub">First aid protocol and identification / anti-venom contacts. Post beside the medical kit and Priority Contact Card.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('snakebite-guide')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('snakebite-guide')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('snakebite-guide')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="box" style="margin-bottom:.16in;">
@@ -1726,7 +1735,7 @@
 <section class="page" id="animal-risk-guide">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A31 · Section 8.3</div><h2 class="pg-title">Animal Risk Quick Guide</h2><p class="pg-sub">Species-by-species risks and safety tips. Post at guide briefings and the Command Post.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('animal-risk-guide')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('animal-risk-guide')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('animal-risk-guide')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm" style="font-size:8.6pt;">
@@ -1749,7 +1758,7 @@
 <section class="page" id="spill-kit-guide">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A32 · Section 8.4</div><h2 class="pg-title">Spill Kit Contents Guide</h2><p class="pg-sub">PPE and containment items every spill kit should hold. Check monthly and after every use.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('spill-kit-guide')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('spill-kit-guide')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('spill-kit-guide')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <p style="font-size:9pt;font-weight:700;margin:0 0 .06in;">Personal Protective Equipment (PPE)</p>
@@ -1795,7 +1804,7 @@
 <section class="page" id="supplies-checklist">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A33 · Section 8.7 (Severe Weather / Readiness)</div><h2 class="pg-title">Emergency Supplies Checklist</h2><p class="pg-sub">Minimum reserve levels for a 14-day self-sufficiency window, in line with the Country Shutdown protocol and Sphere/WHO humanitarian minimums, adapted for a remote lodge.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('supplies-checklist')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('supplies-checklist')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('supplies-checklist')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8.3pt;">
     <table class="frm">
@@ -1824,7 +1833,7 @@
 <section class="page" id="radio-codes">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A34 · Radio Discipline</div><h2 class="pg-title">Radio Code List</h2><p class="pg-sub">Coded alarm phrases used across every scenario in this handbook. Post at every radio point and Command Post.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('radio-codes')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('radio-codes')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('radio-codes')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="frm">
@@ -1865,7 +1874,7 @@
 <section class="page" id="belongings-log">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A35 · Section 8.8</div><h2 class="pg-title">Belongings Inventory Log</h2><p class="pg-sub">Itemise, seal, and witness all personal effects before handover to police, next-of-kin, or Head Office. Never dispose of or release items without this record.</p></div><div class="pg-ref">Ref #: __________</div></div>
-  <button class="dl-btn" onclick="downloadForm('belongings-log')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('belongings-log')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('belongings-log')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="grid3">
@@ -1911,7 +1920,7 @@
 <section class="page" id="breakdown-report">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A36 · Vehicle Breakdowns</div><h2 class="pg-title">Vehicle Breakdown Report</h2><p class="pg-sub">Driver completes on return to the lodge. Workshop logs any repair action in the Vehicle Maintenance Log.</p></div><div class="pg-ref">Ref #: __________</div></div>
-  <button class="dl-btn" onclick="downloadForm('breakdown-report')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('breakdown-report')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('breakdown-report')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="grid3">
@@ -1947,7 +1956,7 @@
 <section class="page" id="vehicle-checksheet">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A37 · SOP: GEN DG – 001</div><h2 class="pg-title">Daily Vehicle Check Sheet</h2><p class="pg-sub">Complete before every game drive. File in the vehicle logbook — Guide is responsible for sign-off.</p></div><div class="pg-ref">Page 1 of 2</div></div>
-  <button class="dl-btn" onclick="downloadForm('vehicle-checksheet')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('vehicle-checksheet')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('vehicle-checksheet')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8.3pt;">
     <div class="grid3" style="margin-bottom:.06in;">
@@ -1974,7 +1983,7 @@
 
 <section class="page" id="vehicle-checksheet-2">
   <div class="pg-head"><div><div class="pg-eyebrow">A37 · SOP: GEN DG – 001</div><h2 class="pg-title">Daily Vehicle Check Sheet — Communications, Comfort &amp; Sign-Off</h2><p class="pg-sub">Continued from page 1.</p></div><div class="pg-ref">Page 2 of 2</div></div>
-  <button class="dl-btn" onclick="downloadForm('vehicle-checksheet-2')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('vehicle-checksheet-2')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('vehicle-checksheet-2')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8.3pt;">
     <table class="frm" style="font-size:7.6pt;">
@@ -2000,7 +2009,7 @@
 <section class="page" id="predeparture-checklist">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A38 · Town Emergencies</div><h2 class="pg-title">Pre-Departure Checklist</h2><p class="pg-sub">Complete before every town run, supply trip, or staff transfer. Keep a copy at Reception until the vehicle returns.</p></div><div class="pg-ref">Ref #: __________</div></div>
-  <button class="dl-btn" onclick="downloadForm('predeparture-checklist')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('predeparture-checklist')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('predeparture-checklist')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="grid3">
@@ -2040,7 +2049,7 @@
 <section class="page" id="packing-list">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A39 · Town Emergencies / Bush Activities</div><h2 class="pg-title">Packing List Template</h2><p class="pg-sub">Example for a bush dinner, boma, or mobile activity. Head Barman / activity leader records items loaded and unloaded, with stock counted and signed off.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('packing-list')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('packing-list')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('packing-list')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="grid3">
@@ -2076,7 +2085,7 @@
 <section class="page" id="guest-manifest">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A40 · Section 8.12</div><h2 class="pg-title">Guest Manifest Template</h2><p class="pg-sub">Share with the lodge before every flight so headcounts are accurate if something happens. Keep a copy at Reception until the balloon lands.</p></div><div class="pg-ref">Date: __________</div></div>
-  <button class="dl-btn" onclick="downloadForm('guest-manifest')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('guest-manifest')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('guest-manifest')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="grid3">
@@ -2110,7 +2119,7 @@
 <section class="page" id="symptom-log">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A41 · Section 8.11</div><h2 class="pg-title">Symptom Tracking Log</h2><p class="pg-sub">Emergency Coordinator opens this immediately and logs every affected guest or team member — name, symptoms, and onset time.</p></div><div class="pg-ref">Ref #: __________</div></div>
-  <button class="dl-btn" onclick="downloadForm('symptom-log')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('symptom-log')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('symptom-log')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <div class="grid3">
@@ -2145,7 +2154,7 @@
 <section class="page" id="kitchen-batch-log">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A45 · Section 8.11</div><h2 class="pg-title">Kitchen Menu &amp; Batch Log</h2><p class="pg-sub">Complete for every meal service. Retain a labelled sample of each dish for 72 hours — this is what allows an outbreak to be traced back to its source. Keep logs for 3 months.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('kitchen-batch-log')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('kitchen-batch-log')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('kitchen-batch-log')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body" style="font-size:8pt;">
     <div class="grid3" style="margin-bottom:.12in;">
@@ -2191,7 +2200,7 @@
 <section class="page" id="ckl-foodborne">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">A46 · Section 8.11</div><h2 class="pg-title">ICS Activation Checklist — Food &amp; Water-borne Illness Outbreak</h2><p class="pg-sub">Printable version of the on-screen checklist for the Food &amp; Water-borne Illness Outbreak scenario. NEW form — added to close the A-code gap identified for Section 8.11.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('ckl-foodborne')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('ckl-foodborne')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('ckl-foodborne')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">← Index</a>
   <div class="pg-body">
     <table class="ckl-table"><thead><tr><th>Time</th><th>Step</th><th>Actions</th><th>Lead / support</th><th>Confirmations</th></tr></thead><tbody>
@@ -2210,7 +2219,7 @@
 <section class="page" id="role-card-incident-commander">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">GEN PROP 01 &middot; ICS Quick Action Role Card</div><h2 class="pg-title">Incident Commander</h2><p class="pg-sub">Typical assignment: General Manager / Acting General Manager. Primary function: overall strategic command and decision-making authority.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('role-card-incident-commander')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('role-card-incident-commander')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('role-card-incident-commander')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">&larr; Index</a>
   <div class="pg-body">
     <div class="grid2">
@@ -2247,7 +2256,7 @@
 <section class="page" id="role-card-operations-commander">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">GEN PROP 01 &middot; ICS Quick Action Role Card</div><h2 class="pg-title">Operations Commander</h2><p class="pg-sub">Primary function: tactical / on-scene command. You turn the Incident Commander's objectives into action on the ground.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('role-card-operations-commander')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('role-card-operations-commander')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('role-card-operations-commander')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">&larr; Index</a>
   <div class="pg-body">
     <div class="grid2">
@@ -2284,7 +2293,7 @@
 <section class="page" id="role-card-logistics-commander">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">GEN PROP 01 &middot; ICS Quick Action Role Card</div><h2 class="pg-title">Logistics Commander</h2><p class="pg-sub">Primary function: resources, communications systems and technical/logistical support. This role must not drift into Emergency Coordinator responsibilities.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('role-card-logistics-commander')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('role-card-logistics-commander')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('role-card-logistics-commander')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">&larr; Index</a>
   <div class="pg-body">
     <div class="grid2">
@@ -2321,7 +2330,7 @@
 <section class="page" id="role-card-emergency-coordinator">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">GEN PROP 01 &middot; ICS Quick Action Role Card</div><h2 class="pg-title">Emergency Coordinator</h2><p class="pg-sub">Primary function: incident logging, accountability, notifications, coordination and documentation. This role must remain clearly different from the Logistics Commander.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('role-card-emergency-coordinator')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('role-card-emergency-coordinator')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('role-card-emergency-coordinator')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">&larr; Index</a>
   <div class="pg-body">
     <div class="grid2">
@@ -2358,7 +2367,7 @@
 <section class="page" id="role-card-medic">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">GEN PROP 01 &middot; ICS Quick Action Role Card</div><h2 class="pg-title">Medic / First Aid Leader</h2><p class="pg-sub">Primary function: casualty assessment and first aid within your training and scope.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('role-card-medic')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('role-card-medic')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('role-card-medic')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">&larr; Index</a>
   <div class="pg-body">
     <div class="grid2">
@@ -2395,7 +2404,7 @@
 <section class="page" id="role-card-fire-marshal">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">GEN PROP 01 &middot; ICS Quick Action Role Card</div><h2 class="pg-title">Fire Marshal</h2><p class="pg-sub">Primary function: fire response coordination — alarm, evacuation support, and safe containment within trained capability.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('role-card-fire-marshal')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('role-card-fire-marshal')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('role-card-fire-marshal')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">&larr; Index</a>
   <div class="pg-body">
     <div class="grid2">
@@ -2432,7 +2441,7 @@
 <section class="page" id="role-card-responder">
   <div class="pg-head">
   <div class="pg-logo-top" role="img" aria-label="Elewana Collection"></div><div><div class="pg-eyebrow">GEN PROP 01 &middot; ICS Quick Action Role Card</div><h2 class="pg-title">Responder</h2><p class="pg-sub">Not every team member is automatically a formal Responder. Formal Responder roles are filled by trained team members listed on the current duty roster.</p></div><div class="pg-ref">Page 1 of 1</div></div>
-  <button class="dl-btn" onclick="downloadForm('role-card-responder')" title="Download this page as PDF">Download PDF</button>
+  <div class="pg-btns"><button class="dl-btn" onclick="downloadForm('role-card-responder')" title="Download this page as PDF">Download PDF</button><button class="print-btn" onclick="printForm('role-card-responder')" title="Print this page">Print PDF</button></div>
   <a class="index-link" href="#index" title="Return to the index">&larr; Index</a>
   <div class="pg-body">
     <div class="grid2">
@@ -2505,12 +2514,18 @@ var VIEW_GROUPS = {
 function viewGroupFor(id){
   return VIEW_GROUPS[id] || groupFor(id);
 }
-function downloadForm(id){
+function isolateAndPrint(id){
   var keep = groupFor(id);
   document.querySelectorAll('.page').forEach(function(p){
     if (keep.indexOf(p.id) === -1) p.setAttribute('data-hide-print','1');
   });
   window.print();
+}
+function downloadForm(id){
+  isolateAndPrint(id);
+}
+function printForm(id){
+  isolateAndPrint(id);
 }
 window.addEventListener('afterprint', function(){
   document.querySelectorAll('[data-hide-print]').forEach(function(p){ p.removeAttribute('data-hide-print'); });

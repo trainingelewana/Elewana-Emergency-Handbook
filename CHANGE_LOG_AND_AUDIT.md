@@ -993,3 +993,70 @@ All 4 genuinely-affected sections re-rendered after the fix and visually confirm
 ## BB.5 Accountability note
 
 This was a real miss: a shared, document-wide CSS change was verified against only the specific case it was built to fix (2-item grids) rather than swept across all usages of the class before being called complete. The lesson carried forward: any edit to a shared/utility CSS rule needs to be checked against the full range of how that class is actually used in the document, not just the triggering example — this is now the second time in this session a shared-class change needed a follow-up fix after being under-verified (see also §Y.3's disclosed uncertainty about the `.line` fix, which at least was flagged as unverified at the time rather than asserted as complete).
+
+# Section CC — Page-overflow/clipping bug (doc-page.js) fixed; Six Mandatory GitHub Alignment Corrections applied
+
+## CC.1 Root cause: content clipped by fixed page height + overflow:hidden
+
+`doc-page.js` renders each `<section class="page">` at a fixed physical page height with `overflow:hidden`. Two earlier, individually-correct CSS fixes this session (§Y.3's `.line` fallback, §BB's grid2/grid3 flex conversion) were never checked against this physical page boundary, causing six form pages to silently clip content off the bottom with no visible error:
+
+| Section | Overflow before fix |
+|---|---|
+| `medical-report` | 479px |
+| `trauma-obs-back` | 290px (the reported missing Trauma Chart diagram) |
+| `bomb-checklist` | 191px |
+| `nonphone-threat-guide` | 84px |
+| `vehicle-report-2` | 27px |
+| `sitrep-3` | 4px |
+
+## CC.2 Fix 1 — `.grid2`/`.grid3` reverted to true CSS Grid
+
+The flexbox approximation (`display:flex` + manual `flex-basis`/margin math) introduced in §BB was itself the dominant cause — confirmed by isolating the change and re-measuring. Reverted to the original, correct mechanism:
+```css
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.18in;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.18in;}
+```
+This resolved `bomb-checklist` and `nonphone-threat-guide` completely (0px overflow) and cut `medical-report` from 479px to 18px. Re-verified with real Playwright/Chromium (now available in-sandbox) at desktop, mobile, and print-media emulation — no collision regression on any 2/3-item grid (role cards, contact cards, etc.).
+
+Note: this reintroduces a dependency on real CSS Grid support. `wkhtmltopdf` (used only as a sandbox fallback when Playwright/Chromium is unavailable) does not support Grid. Real Chromium — now confirmed working in this sandbox and used throughout this session — is the canonical renderer for both the live site and the PDF generation pipeline, so this is a reasonable trade-off, but flagged for visibility.
+
+## CC.3 Fix 2 — Trauma & Vitals (A42) given a third page
+
+`trauma-obs-back`'s overflow was unrelated to the grid bug (unchanged before/after §CC.2) and traced to §Y.3's `.line` fix legitimately needing more room than the page had. Page 1 had zero spare capacity, so rebalancing wasn't viable. Split the Trauma Chart (body diagrams) onto a new `#trauma-obs-chart` page 3:
+- Page labels updated: 1 of 3, 2 of 3, 3 of 3
+- TOC entry: "Page 58–59" → "Page 58–60"
+- `downloadForm('trauma-obs-chart')` wired to the existing print-isolation mechanism
+- Verified: all three pages measure exactly 0px overflow; body diagrams (FRONT/RIGHT SIDE/BACK/LEFT SIDE + legend) render fully intact
+
+## CC.4 Remaining minor overflow (not content-affecting)
+
+`medical-report` (18px), `vehicle-report-2` (44px), `incident-report` (44px, previously under the noise floor), `sitrep-3` (4px) — leftover from Grid's `gap:.18in` being slightly larger than the broken flex version's row spacing. Not a collision, not clipping visible content — closeable with a minor non-content spacing trim if desired.
+
+## CC.5 Six Mandatory GitHub Alignment Corrections (from `Claude_Mandatory_Final_6_GitHub_Alignment_Corrections.docx`)
+
+| # | Correction | Files | Evidence |
+|---|---|---|---|
+| 1 | Fire liaison wording | `index.html` (tpl-fire), `elewana-forms-pack.html` (A19), `forms/ckl-fire.pdf` | Old: "Keep radio traffic clear — the Incident Commander is the only person who speaks to anyone outside the property." → New: liaison language per corrections doc, with Section 7.2 exception referenced. PDF: redact+reinsert, 16/16 fields preserved, fill/save/reopen PASS. |
+| 2 | Firearm/media wording | `index.html` (tpl-firearm), `elewana-forms-pack.html` (A23), `forms/ckl-firearm.pdf` | Old: "Only the General Manager or Operations Director speaks to outside parties or the media." → New: IC/EC operational contact, Head Office spokesperson referral (Section 7.4), Section 7.2 exception. PDF: redact+reinsert, 14/14 fields preserved, fill/save/reopen PASS. |
+| 3 | Print PDF control | `elewana-forms-pack.html`, all 71 form pages | New `.pg-btns` wrapper + `.print-btn` CSS/JS (`printForm()`, refactored from shared `isolateAndPrint()`). 71 Download / 71 Print, exact parity. Verified hidden under print-media emulation; verified `printForm()` executes with zero JS errors. |
+| 4 | "Break, break, break" radio rule | `index.html` (tpl-training, Phase 2 "Call for Help") | Added interruption-call wording; explicitly states it does not replace "Emergency Priority". Verified rendering live via `showPage('page-training')` simulation, not just static source. |
+| 5 | Kenya Head Office order | `index.html` (tpl-contacts) | Reordered to Jarryd → Callum → Moses → Schalk & Candice. Verified via live DOM query of `.info-card` rows after `showPage('page-contacts')`. |
+| 6 | Jarryd King's title | `index.html`, both TZ and KE rows | "Director of Operations" → "Director of Hospitality and Operations" in both occurrences. Zero remaining "Director of Operations" in repo. |
+
+**PDF text-fit method:** both PDF edits used PyMuPDF redact + `insert_textbox` reinsertion (established pattern from earlier sessions). The corrected wording is longer than the original in both cases; fit by reducing in-cell font size to 6.0pt (from 7.4pt/6.9pt) — this is the smallest text in either document. Flagged to Winnie as a visible trade-off; full row-height redesign was offered as a follow-up if preferred over the shrink.
+
+`contact-card.pdf`/`contact-card-ke.pdf` checked — role-based only, no names printed, nothing to change. 6/6 fields confirmed intact on both.
+
+**Acceptance tests (Section 9 of the corrections doc):** all 14 checked; 1–13 PASS directly; 14 (service worker/cache) — no service worker or offline cache found in this repo, not applicable.
+
+## CC.6 Numerical evidence
+
+- Download button count: 71 · Print button count: 71
+- A19 (`ckl-fire.pdf`) fields: 16 · A23 (`ckl-firearm.pdf`) fields: 14
+- A4-TZ fields: 6 · A4-KE fields: 6
+- Broken internal anchor links: 0 · JS console errors: 0
+- Overflowing sections after all fixes: 4 (all non-content, see §CC.4)
+
+## CC.7 Status
+
+Not yet pushed to GitHub — delivered to Winnie as a zip via `present_files` (sandbox has no push credentials, per standing constraint).
