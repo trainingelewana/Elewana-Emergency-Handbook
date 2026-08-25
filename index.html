@@ -274,6 +274,35 @@
   .role-table td{padding:.6rem .4rem;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-soft);}
   .role-table td.role-name{color:var(--ink);font-weight:600;white-space:nowrap;}
 
+  /* ===== Role tables as stacked cards on narrow phones ===== */
+  @media (max-width:600px){
+    .role-table.stacked{border-collapse:separate;border-spacing:0;}
+    .role-table.stacked thead{
+      position:absolute;width:1px;height:1px;overflow:hidden;
+      clip:rect(0 0 0 0);white-space:nowrap;
+    }
+    .role-table.stacked, .role-table.stacked tbody{display:block;width:100%;}
+    .role-table.stacked tr{
+      display:block;background:var(--white);border:1px solid var(--line);
+      border-radius:12px;padding:.75rem .85rem;margin-bottom:.6rem;
+    }
+    .role-table.stacked tr:last-child{margin-bottom:0;}
+    .role-table.stacked td{
+      display:block;border-bottom:none;padding:0;white-space:normal;
+    }
+    .role-table.stacked td.role-name{
+      font-size:.92rem;margin-bottom:.5rem;padding-bottom:.5rem;
+      border-bottom:1px solid var(--line);
+    }
+    .role-table.stacked td[data-label]{margin-top:.55rem;}
+    .role-table.stacked td[data-label]::before{
+      content:attr(data-label);display:block;
+      font-family:'Fraunces',serif;font-weight:600;font-size:.68rem;
+      letter-spacing:.06em;text-transform:uppercase;color:var(--gold-deep);
+      margin-bottom:.12rem;
+    }
+  }
+
   .video-link{
     display:flex;align-items:center;gap:.7rem;
     background:var(--cream-deep);border-radius:11px;
@@ -6595,11 +6624,28 @@
         mount.style.setProperty('--red-deep', tpl.dataset.redDeep);
         mount.style.setProperty('--red-tint', tpl.dataset.redTint);
         mount.dataset.current = key;
+        prepRoleTables(mount);
       }
       mount.classList.add('active');
     }
     window.scrollTo(0,0);
     history.replaceState(null, '', '#' + key);
+  }
+  function prepRoleTables(scope){
+    (scope || document).querySelectorAll('table.role-table').forEach(function(table){
+      if (table.dataset.prepped === 'true') return;
+      const headers = Array.from(table.querySelectorAll('thead th')).map(function(th){
+        return th.textContent.trim();
+      });
+      table.querySelectorAll('tbody tr').forEach(function(row){
+        Array.from(row.children).forEach(function(td, i){
+          if (i === 0 || !headers[i]) return;
+          td.setAttribute('data-label', headers[i]);
+        });
+      });
+      table.classList.add('stacked');
+      table.dataset.prepped = 'true';
+    });
   }
   function printPage(title){
     const prevTitle = document.title;
@@ -6613,6 +6659,7 @@
   (function(){
     const h = location.hash.replace('#','');
     if (h && document.getElementById('tpl-' + h)) showPage('page-' + h);
+    prepRoleTables(document);
   })();
 </script>
 </body>
