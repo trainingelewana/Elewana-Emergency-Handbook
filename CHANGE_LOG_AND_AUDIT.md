@@ -1060,3 +1060,49 @@ Note: this reintroduces a dependency on real CSS Grid support. `wkhtmltopdf` (us
 ## CC.7 Status
 
 Not yet pushed to GitHub — delivered to Winnie as a zip via `present_files` (sandbox has no push credentials, per standing constraint).
+
+# Section DD — Kenya Head Office contact update (Benjamin Ndegwa, Gabriel Kamanu confirmed)
+
+## DD.1 Trigger
+
+Winnie supplied a new, confirmed Kenya Head Office & Priority Contacts table (screenshot) and asked for it to be applied everywhere the affected numbers are used, then treated as confirmed data — not a draft for further review.
+
+## DD.2 Change applied — `index.html` (`tpl-contacts`, Kenya table)
+
+| Contact | Before | After |
+|---|---|---|
+| Field Operations Manager | "Field Operations Manager" | "Field Operations Manager — **Kenya**" (wording only, same person/number: Moses Waititu, +254 713 437 380) |
+| Compliance | Dhaminder Singh Matharu — Head of Audit, Compliance & Risk — +254 733 835 811 | **Benjamin Ndegwa — Head of Compliance — +254 711 422 986** |
+| Workshop Manager | Mohamed Hussein Verjee — +254 727 487 536 | **Gabriel Kamanu — Workshop Manager — +254 727 487 536** (same number, new name) |
+| List order | Samuel Mbugua before Reservations Kenya | Reservations Kenya before Samuel Mbugua (matches supplied table) |
+
+All other Kenya rows (Jarryd King, Callum Oliver, Schalk & Candice Pretorius, Sameer Rohit J. Patel, Kassam Abdulaziz Kassam, Nicholas Odhiambo Ochieng, Reservations Kenya, Samuel Mbugua) — numbers unchanged, confirmed matching against the supplied table before editing. Tanzania table not touched — this update was Kenya-only.
+
+## DD.3 Historical note — this is not a simple restoration
+
+Both **Benjamin Ndegwa** and **Gabriel Kamanu** previously existed on this dashboard and were removed in §I:
+- Benjamin Ndegwa was originally "Compliance" with an unconfirmed (`[to confirm]`) number; §I replaced him with Dhaminder Singh Matharu.
+- Gabriel Kamanu was originally "Group Technical Service Manager" with an unconfirmed number; §I replaced him with Kassam Abdulaziz Kassam (who remains in the Head of Maintenance seat today, unaffected by this change).
+
+This update does not reverse §I or reuse the old identities — both names return with **different titles and numbers** than they held before (Benjamin as "Head of Compliance" with a newly-confirmed number; Gabriel as "Workshop Manager", a seat Mohamed Hussein Verjee previously held). Flagged to Winnie directly in-session; confirmed as intended before treating the data as final.
+
+## DD.4 Cross-check — no other file needed this data
+
+- `elewana-forms-pack.html` — searched for all four names (Jarryd King, Callum Oliver, Benjamin Ndegwa, Gabriel Kamanu) plus the two removed names (Dhaminder, Mohamed Hussein Verjee): zero occurrences anywhere. Confirmed by full-text search after the edit, not assumed.
+- Editable PDF forms (all 54 checked) — `contact-card-ke.pdf` (A4-KE) is role-based only ("General Manager (IC)", "Operations Manager", etc.), no named individuals. Its one specific number, Reservations Kenya (+254 722 247 544), is unchanged. No PDF required editing.
+- Onsite Emergency Response Binder (rebuilt PDF, separate deliverable) — regenerated from the corrected `index.html` so the Kenya Head Office contacts page carries the update through automatically. Re-verified visually after rebuild.
+
+## DD.5 White-background check (asked in the same pass, unrelated to the contact data)
+
+All 54 editable PDF forms sampled for background colour at 5 points per page. All clean cream/white (`#FFFDF9` and matching tints), print-safe. One page (`ckl-death.pdf`, A21) initially flagged a dark sample pixel; rendered and visually inspected — false positive, the sample point landed on a table border line, not a background defect.
+
+## DD.6 Files changed this pass
+
+- `index.html` — Kenya contacts table only, as above.
+- Onsite Emergency Response Binder — rebuilt to carry the update (separate file, not part of this repo).
+
+No changes to `elewana-forms-pack.html` or any `forms/*.pdf` — confirmed not needed, not touched.
+
+## DD.7 Status
+
+Not yet pushed to GitHub — `index.html` delivered to Winnie directly for manual upload via the repo's web upload page (sandbox has no push credentials, per standing constraint).
