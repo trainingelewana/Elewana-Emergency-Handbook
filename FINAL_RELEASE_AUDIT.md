@@ -1,37 +1,114 @@
-# FINAL_RELEASE_AUDIT.md — Elewana Group Emergency Procedure Protocol
+# FINAL RELEASE AUDIT — Elewana Group Emergency Procedure Protocol
 
-**Purpose:** a short, current-state summary of release status. For full history and rationale, see `CHANGE_LOG_AND_AUDIT.md` (lettered sections A–FF). This file reflects the state as of Section FF and should be updated (not archived) as future controlled passes close items.
+**Audit date:** 28 August 2026  
+**Release basis:** Controlled close-down audit following the final V9 workbook corrections  
+**Repository:** `trainingelewana/Elewana-Emergency-Handbook`  
+**Repository branch:** `main`  
+**Repository commit audited:** `aa8197b7c255f5364b52f0b09fa5064ee011d481`
 
-## Closed items (verified this pass, Section FF)
+## 1. Release status
 
-| Item | Status | Where verified |
+**DOCUMENT ALIGNMENT STATUS: GREEN — CLOSED FOR CONTROLLED RELEASE**
+
+The Emergency Handbook workbook, Onsite Emergency Response Binder, live `index.html`, Forms & Templates Pack, and linked operational forms are substantively aligned in Incident Command structure, activation, command authority, responder responsibilities, escalation, emergency communications, scenario procedures, radio codes, country contact-card structure, and supporting forms.
+
+No material contradiction was identified that requires another operational redevelopment cycle.
+
+A separate specialist verification action remains open for defined clinical and medevac-provider content. This is a governance/sign-off action and is not a cross-document alignment defect.
+
+## 2. Controlled sources audited
+
+| Controlled source | Release state |
+|---|---|
+| `Emergency Handbook Final PreSignoff V9 - FINAL RELEASE.docx` | **CLOSED** |
+| `Elewana_Onsite_Emergency_Response_Binder_REBUILT.pdf` | **CLOSED** |
+| `index.html` | **CLOSED** |
+| `elewana-forms-pack.html` | **CLOSED** |
+| `forms/*.pdf` operational forms library | **CLOSED for document/form alignment** |
+| `FINAL_RELEASE_AUDIT.md` | **Updated by this close-down pass** |
+
+## 3. Closed items
+
+| Item | Status | Close-down finding |
 |---|---|---|
-| Fire vs Firearm radio-code duplication | **CLOSED** — Fire = "Code Red", Firearm/Weapon Attack = "Code Security", no overlap | `index.html` scenario wording, `elewana-forms-pack.html` A34 radio code table |
-| A4-TZ / A4-KE contact card split | **CLOSED** — separately linked everywhere, correctly labelled | Every `contact-card.pdf` / `contact-card-ke.pdf` link in `index.html` |
-| Bomb-threat fixed 50 m stand-off | **CLOSED** — no fixed distance; Police/Bomb Disposal set stand-off | `index.html`, `elewana-forms-pack.html`, `forms/ckl-bomb.pdf` |
-| Death/CPR fixed 20-minute rule | **CLOSED** — no fixed time limit; authorised/qualified pronouncement only | `index.html`, `elewana-forms-pack.html`, `forms/ckl-death.pdf` |
-| Kenya emergency numbers vs Tanzania 114 | **CLOSED** — Kenya 999/112/911, Tanzania 114, no cross-contamination | `index.html`, `forms/contact-card-ke.pdf` |
-| Drowning terminology ("secondary"/"delayed"/"dry"/"near-drowning") | **CLOSED** — retired repo-wide | `index.html`, `elewana-forms-pack.html`, `forms/ckl-aquatic.pdf` |
-| Crisis-comms governance (media vs next-of-kin) | **CLOSED** — spokesperson for media/public only; HO-coordinated next-of-kin/family/DMC/embassy/insurer | `index.html`, `elewana-forms-pack.html` |
-| Raw `[to confirm]` / placeholder contact text | **CLOSED** — replaced with controlled fallback messages or "Role holder pending confirmation"; no numbers fabricated | `index.html` (P1 list, Police — Tanzania table, Police — Kenya table) |
-| Editable PDF form backgrounds | **CLOSED** — all 47 editable forms converted cream → white for print; 7 static role cards intentionally left cream (out of scope, no fillable fields) | All `forms/*.pdf` except `role-card-*.pdf` |
-| A46 (Food & Water-borne Illness Outbreak) fillable form | **CLOSED** — already a genuine AcroForm, correct field-naming convention, correct title | `forms/ckl-foodborne.pdf` |
-| Internal navigation / broken links | **CLOSED** — all 21 scenario nav targets resolve; no PDF download button points to `href="#"` | Automated check + Playwright smoke test |
+| Standard Incident Command structure | **CLOSED** | IC, OC, LC, EC, Medic, Fire Marshal and Responders are consistently defined across the operational sources. |
+| Country Shutdown special ICS allocation | **CLOSED** | OC = Maintenance Manager, LC = Executive Chef, EC = Front Office Manager; same special allocation is used in the workbook, binder, live HTML and A26 checklist. |
+| Fire vs Firearm radio-code duplication | **CLOSED** | Fire = **Code Red**; Firearm / Weapon Attack = **Code Security**. |
+| Firearm / Weapon Attack drill frequency | **CLOSED** | Standardised to at least twice per year, including tabletop and practical components. |
+| Bomb-threat fixed 50 m stand-off | **CLOSED** | No fixed distance is treated as universally safe; Police/Bomb Disposal determine stand-off based on the suspected device and site conditions. |
+| Bomb-threat communications restriction | **CLOSED** | Radio/mobile/Wi-Fi transmissions are prevented in the immediate vicinity of the suspicious item and a safe communications point is established outside the isolated area. |
+| A4-TZ / A4-KE Priority Contact Card split | **CLOSED** | Tanzania and Kenya contact cards remain separate and correctly linked. |
+| Raw emergency-contact placeholders | **CLOSED as a document-control issue** | Unconfirmed local contacts use controlled fallback wording and national emergency numbers rather than unfinished placeholders or fabricated numbers. |
+| A46 Food & Water-borne Illness Outbreak | **CLOSED** | A46 is integrated in the workbook/forms architecture, live index, Forms Pack and operational PDF forms. |
+| Editable forms / linked forms integrity | **CLOSED** | Current repository QA records all operational form links resolving, white printable editable backgrounds, and fill/save/reopen persistence testing of editable AcroForms. |
+| Death / CPR fixed-time wording | **CLOSED** | No inappropriate fixed 20-minute rule remains; authorised/qualified pronouncement requirements are retained. |
+| Drowning terminology | **CLOSED** | Deprecated terminology has been removed from the controlled digital sources. |
+| Crisis communications governance | **CLOSED** | Media/public communication remains under authorised spokesperson control; next-of-kin/family/DMC/embassy/insurer communication follows the defined Head Office coordination process. |
+| V9 obsolete Section 5.1.2 cross-reference text | **CLOSED** | Two residual `Section 5.1.2.` hyperlink prefixes were removed from the final workbook. The correct references now point to Section 5.1 and A4-TZ / A4-KE. |
+| Onsite Emergency Response Binder rebuild | **CLOSED** | Rebuilt binder was included in this close-down audit and is aligned with the current operational source set. |
+| GitHub upload / live repository state | **CLOSED** | Current live repository state audited at commit `aa8197b7c255f5364b52f0b09fa5064ee011d481`. |
 
-## Open / pending items
+## 4. Final V9 workbook correction completed
 
-| Item | Status | Notes |
-|---|---|---|
-| Clinical and medevac content (A42, tourniquet/IV-IO/BP, AMREF coverage, mobilisation cut-offs, night-airstrip instructions) | **PENDING VERIFICATION** | Not rewritten by Claude on any pass. Requires sign-off from a medical adviser / WFA provider / medevac provider before any wording change. Record verifier name, date, and scope here once obtained. |
-| Onsite Emergency Response Binder rebuild | **PENDING** | Not present in the current sandbox session; binder-specific corrections from the Final Safety Alignment brief (front-matter note, page renumbering, binder-only process-flow relabels) have not been applied. Apply on next binder rebuild from the corrected HTML sources. |
-| Roxanne Cragg personnel discrepancy | **DEFERRED** | Present in Word source, absent from live dashboard. Flagged for human decision; not actioned. |
-| "SafariCo" branding on Word SOP document | **DEFERRED** | Confirmed intentional in an earlier session; no action needed unless Winnie says otherwise. |
-| GitHub push / commit | **NOT DONE** | Sandbox has no push credentials. All changes delivered as a changed-files-only zip for manual upload. Commit SHA to be recorded here once Winnie completes the upload. |
+Two obsolete hyperlink prefixes reading `Section 5.1.2.` remained in the V9 Word source even though the sentence wording had already been corrected.
 
-## Verification method notes
+They were removed without altering the surrounding operational content.
 
-- Text-content checks (placeholder strings, radio codes, banned phrases) were done via direct string search across `index.html`, `elewana-forms-pack.html`, and the text layer of every `forms/*.pdf`, not by sampling.
-- PDF field-count and fill/save/reopen persistence were tested programmatically (PyMuPDF) on every directly-edited PDF.
-- Internal link integrity and a basic regression check (page navigation, console errors, mobile viewport overflow) were run with Playwright/Chromium against the local file, not a live deployed URL — Winnie should spot-check the live GitHub Pages site after upload, particularly the PDF download buttons, which cannot be exercised from a local file with certainty that server paths match.
+Final wording now reads:
 
-**Last updated:** this pass (Section FF). Update this file, not a duplicate, on the next controlled pass.
+1. **Use the emergency priority numbers in Section 5.1 and the A4-TZ / A4-KE Priority Contact Cards to alert external responders.**
+2. **All camps must keep emergency contact numbers posted near radios and phones (see Section 5.1 and the A4-TZ / A4-KE Priority Contact Cards).**
+
+The final workbook was rendered after the correction. Page count remained **124 pages**. A page-by-page render comparison against the audited V9 source showed visual changes only on pages **25** and **35**, corresponding exactly to the two controlled corrections.
+
+## 5. Forms and digital-source close-down
+
+The live repository contains the operational scenario checklists, contact cards, medical forms, radio-code reference, incident forms, logs and supporting tools required by the controlled forms architecture.
+
+Key high-risk checks closed during the final audit include:
+
+- A24 Bomb Threat — no fixed stand-off distance; communications restriction aligned.
+- A26 Country Shutdown / Movement Restriction — special ICS role allocation aligned.
+- A34 Radio Codes — Fire and Firearm codes clearly separated.
+- A46 Food & Water-borne Illness Outbreak — correctly integrated.
+- A4-TZ and A4-KE — separately maintained and linked.
+- Operational PDF links — repository QA records no missing linked form targets.
+
+## 6. Open specialist verification action
+
+### Clinical and medevac-provider content — PENDING SPECIALIST SIGN-OFF
+
+The following content is intentionally **not rewritten by the document audit** and should be verified by an appropriately qualified medical adviser / wilderness first-aid provider and the relevant medevac/aviation provider:
+
+- A42 trauma and vitals clinical content.
+- Tourniquet, IV/IO and blood-pressure target wording.
+- AMREF / Flying Doctors / Arusha Medivac coverage statements.
+- Mobilisation cut-offs, including the stated 16:00 same-day air mobilisation wording.
+- Night-airstrip operating instructions and provider-specific limitations.
+
+**Audit position:** no cross-source contradiction requiring document redevelopment was identified. The outstanding action is evidence of specialist verification: verifier name, organisation/qualification, date, scope reviewed, and any approved amendments.
+
+## 7. Release decision
+
+**FINAL PANEL POSITION: APPROVED FOR CONTROLLED RELEASE, WITH SPECIALIST CLINICAL/MEDEVAC VERIFICATION RECORDED AS AN OPEN GOVERNANCE ACTION UNTIL SIGNED OFF.**
+
+The document-control and cross-source close-down is complete.
+
+No additional broad rewrite of the Emergency Handbook, Binder, HTML handbook, Forms Pack or operational forms is recommended.
+
+## 8. Release-control actions
+
+Before organisational issue, the document owner should:
+
+- retain the final V9 workbook as the controlled master;
+- retain the rebuilt binder as the controlled onsite source;
+- retain the audited GitHub commit/reference as the digital release baseline;
+- record the final medical and medevac verifier details when received;
+- update emergency contact details as local confirmed numbers become available without removing the national fallback;
+- manage all future changes through formal revision control so the workbook, binder, HTML and forms remain synchronised.
+
+---
+
+**Close-down audit result:** **GREEN — DOCUMENT ALIGNMENT CLOSED**  
+**Outstanding controlled action:** **Clinical / medevac specialist verification only**  
+**Audited repository baseline:** `aa8197b7c255f5364b52f0b09fa5064ee011d481`
