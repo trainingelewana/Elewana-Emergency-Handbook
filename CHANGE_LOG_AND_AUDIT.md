@@ -1106,3 +1106,72 @@ No changes to `elewana-forms-pack.html` or any `forms/*.pdf` — confirmed not n
 ## DD.7 Status
 
 Not yet pushed to GitHub — `index.html` delivered to Winnie directly for manual upload via the repo's web upload page (sandbox has no push credentials, per standing constraint).
+
+# Section EE — Final Safety Alignment (Death/CPR authority, Kenya emergency numbers, bomb-threat stand-off, drowning terminology, crisis-comms governance) + editable PDF backgrounds set to white
+
+## EE.1 Trigger
+
+Winnie supplied `Claude_Final_Safety_Alignment_Dashboard_Binder.md`, a controlled safety-correction spec keyed to a newly-updated handbook (`...V7_Safety_Alignment.docx`), and asked for the corrections to be applied to `index.html`, `elewana-forms-pack.html`, and the editable PDF forms, plus a request that all editable PDF forms print on a white (not cream) background. The Onsite Emergency Response Binder is a separate deliverable not present in this repo/session and was out of scope for this pass.
+
+## EE.2 Death/CPR authority — fixed 20-minute rule removed
+
+- `index.html` — Death in Camp/Lodge scenario: Step 1 wording and Medic role wording replaced. Lodge responders/Medic no longer pronounce or confirm death on a fixed time limit; CPR/AED continues per the approved control principle until life signs return, EMS/medical staff direct stop, the scene is unsafe, or the responder cannot continue. Death pronouncement now requires legal authorisation and clinical qualification.
+- `elewana-forms-pack.html` — A21 Step 1 (checklist + confirmation tick) updated to the same principle.
+- `forms/ckl-death.pdf` (A21) — Step 1 actions cell and the "death confirmed" confirmation tick redacted and reinserted with the corrected wording (font auto-shrunk to fit the existing cell; no field count change, 11→11).
+- **16:00 medevac wording and the snakebite compression-bandage protocol (A30) were not touched** — confirmed present and unchanged by direct text search before and after.
+
+## EE.3 Kenya emergency numbers
+
+- `index.html` — corrected a misleading "Toll-free (both countries): 114" line under the Tanzania Fire & Rescue card (which wrongly implied Kenya also uses 114) to separately state Tanzania 114 and Kenya 999/112/911. Kenya's Police card already correctly showed 999/112/911 before this pass.
+- `forms/contact-card-ke.pdf` (A4-KE) — "Fire Brigade — 114" replaced with "Fire Brigade - 999 / 112 / 911" (redact + reinsert, field count unchanged, 6→6).
+- `forms/contact-card.pdf` (A4-TZ) — reviewed, no change needed; Tanzania's 114 entry is correct and untouched.
+
+## EE.4 Bomb threat — fixed 50 m stand-off removed
+
+- `index.html` — Bomb Threat scenario step text, flow-node sub-label, and "Key reminders" note all reworded: isolate and move people behind substantial cover, no fixed distance is treated as universally safe, and Police/Bomb Disposal set the actual stand-off. Transmission rule changed from a fixed-radius cutoff to "no transmission in the immediate vicinity of the item."
+- `elewana-forms-pack.html` — A24 Step 3 (actions + confirmation tick) updated to match.
+- `forms/ckl-bomb.pdf` (A24) — Step 3 actions cell and its confirmation tick redacted and reinserted with condensed corrected wording sized to fit the existing row without encroaching on Step 4 (font auto-shrunk; also had to widen the redaction rect left to remove two stray bullet-square glyphs left over from the old two-bullet layout, since the new text uses a single hyphen-led two-line block). Field count unchanged, 10→10.
+
+## EE.5 Drowning terminology — "near-drowning" / "secondary" / "delayed" / "dry" retired
+
+- `index.html` — Water & Aquatic Safety scenario retitled "Non-Fatal Drowning / Post-Submersion Observation & Man-Overboard"; tile description, hero paragraph, definition paragraph, and the assembly note all reworded to "fatal or non-fatal drowning" and the approved post-submersion observation criteria. Man-overboard instructions retained verbatim.
+- `elewana-forms-pack.html` — A28 subtitle, Step 6 debrief note, and the "Code Water" radio-code table description all reworded the same way.
+- `forms/ckl-aquatic.pdf` (A28) — subtitle and the Step 6 "secondary drowning" note redacted and reinserted with the corrected wording (field count unchanged, 9→9).
+
+## EE.6 Crisis communications governance — media vs next-of-kin/family distinguished
+
+- `index.html` — Head Office Spokesperson role, the Death-in-Camp scenario's Step 5 communications action, and its "dignity and discretion" note all reworded so media/public enquiries route through the Head Office-appointed spokesperson only, while next-of-kin/family/DMC/embassy/insurer contact is coordinated by Head Office through an authorised representative/process (lodge team must not contact family directly unless instructed).
+- `elewana-forms-pack.html` — A21 Step 5 reworded to the same distinction.
+
+## EE.7 Medical Evacuation Drill — added to training schedule
+
+- `index.html` — added "Medical Evacuation Drill | Twice per year | Incident Commander / Emergency Coordinator, with Medic and Logistics Commander" to the Training & Drills table, placed after Wilderness First Aid & CPR. No existing drill row removed.
+
+## EE.8 Typo check
+
+- Searched `index.html` and `elewana-forms-pack.html` for "rain property team members" (Bomb Threat prevention typo cited in the spec) — zero occurrences in the current production content. No change needed.
+
+## EE.9 Editable PDF forms — background changed from cream to white
+
+Winnie asked, separately from the safety corrections, for all editable PDF forms to have a white background for onsite printing (superseding the cream `#FFFDF9` design used since §W/§CC). Implemented by:
+- Scanning each page's content stream for the cream fill triple (`~1, ~0.992, ~0.976` in `rg`/`RG` operators, tolerance-matched to catch decimal-precision variants) and replacing it with pure white (`1 1 1`).
+- For every text-field widget, checking its `/MK /BG` background-colour array and its `/AP /N` (and other state) appearance-stream content for the same cream fill, and whitening both — this avoids reintroducing the old "cream-field-on-white-page" mismatch that the opposite fix (§ — appearance stream cream repaint) was originally built to prevent.
+- Explicitly **not** touching the 7 static Quick Action Role Cards (`role-card-*.pdf`) — they have zero fillable fields and are out of scope for "editable forms"; confirmed still cream/print-safe, unchanged.
+- Other decorative tints (e.g. the tan/gold `#F1EBDA`-ish category-cell shading used in some forms, and accent bars) are a **different** RGB triple from the page-background cream and were correctly left untouched by the tolerance-matched replacement — confirmed by visual spot-check.
+
+## EE.10 Verification
+
+- **Acceptance-test sweep** (spec §11) run as literal-string counts across `index.html`, `elewana-forms-pack.html`, and the 5 directly-edited PDFs: all "must be zero" phrases (`If unsuccessful after 20 minutes`, `50 m exclusion zone`, `50 metre exclusion zone`, `near-drowning`, `secondary drowning`, `Sole external voice for media, family, and DMC`, `rain property team members`) — zero everywhere checked. All "must remain" phrases (`16:00`, `Apply a light compression bandage above the wound`, `999`/`112`/`911`, `114` in the Tanzania context, `Head Office-appointed spokesperson`, `Section 7.2`, `Section 7.4`, `Break, break, break`, `Emergency Priority`, `Medical Evacuation Drill`, `Twice per year`, `Care, Accountability & Recovery`) — present and unchanged.
+- **Field-count check**: every edited PDF's fillable-field count verified identical before/after (`ckl-death.pdf` 11→11, `ckl-bomb.pdf` 10→10, `ckl-aquatic.pdf` 9→9, `contact-card-ke.pdf` 6→6; all 47 whitened editable forms individually confirmed [OK] with matching before/after counts in the batch run).
+- **Fill/save/reopen persistence**: spot-tested on `incident-report.pdf` and `sitrep.pdf` after whitening — value entered, saved, reopened, value intact.
+- **Visual QA**: every directly-edited PDF rendered and inspected at full-page and cropped/zoomed resolution; corrected text confirmed to sit inside its original table cell/row with no encroachment into neighbouring rows, no stray leftover bullet-glyphs, no mojibake (em-dash characters replaced with plain hyphens in all newly-inserted PDF text after `insert_textbox` under the base "helv" font rendered em-dashes as "?" — logged here in case this recurs in future PDF text edits). 5 additional whitened forms (`amref.pdf`, `sitrep.pdf`, `trauma-obs.pdf`, `ert-5.pdf`, `roster.pdf`) spot-rendered to confirm no logo stripping and no loss of other design colour.
+- **No A-code changed**; no role-card A-code introduced; Download PDF / Print PDF buttons and `printForm()` counts unchanged (not touched this pass).
+
+## EE.11 Unresolved / out of scope
+
+- The Onsite Emergency Response Binder is not present in this repo/session; the binder-specific instructions in the supplied spec (front-matter evacuation-authority note, binder page renumbering, binder-only process-flow relabels) were not actioned here and would need to be applied the next time the binder is rebuilt from these corrected HTML sources.
+- Roxanne Cragg discrepancy and "SafariCo" branding items (flagged in earlier sessions) remain deferred, unrelated to this pass.
+
+## EE.12 Status
+
+Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint).
