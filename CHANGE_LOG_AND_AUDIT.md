@@ -1175,3 +1175,66 @@ Winnie asked, separately from the safety corrections, for all editable PDF forms
 ## EE.12 Status
 
 Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint).
+
+# Section FF — Controlled close-out pass (contact placeholders resolved, live-state cross-checks, FINAL_RELEASE_AUDIT created)
+
+## FF.1 Trigger
+
+Winnie supplied `HTML_Forms_Editable_Forms_Final_Update_Instructions_for_Claude.docx`, a controlled 10-step close-out brief. Per its Step 1, the brief was treated as authoritative over any older unresolved statements in this audit file, and the live `index.html`/`elewana-forms-pack.html` were checked against it rather than re-authored wholesale.
+
+## FF.2 Step 2 — Bomb-threat stand-off wording: verified, no regression
+
+Searched `index.html` and `elewana-forms-pack.html` for "50 m", "50m", "50 metre", "50 meter". The only "50m" hits in either file are inside the embedded base64 Elewana logo image data (binary, non-operational) — confirmed by inspecting the surrounding text. No operational bomb-threat wording has regressed to a fixed 50 m rule; the §EE wording (Police/Bomb Disposal set the stand-off) is intact in both files and in `ckl-bomb.pdf`.
+
+## FF.3 Step 3 — Firearm drill frequency and Code Red/Code Security: verified, already correct
+
+- `index.html` firearm/weapon prevention list already states "Test the firearms and weapons plan at least twice a year, both as a table-top exercise and a practical drill" — exact match to the brief's required text. Zero occurrences of "at least annually" anywhere in either file.
+- Code Red confirmed used only in the Fire Emergency scenario (detection line and flow-node) in both files.
+- Code Security confirmed used throughout the Firearm/Weapon Attack scenario's detection, activation, and process-flow wording, in both files.
+- A34 (`radio-codes` in the forms pack) already lists "Code Red" → Fire Emergency and "Code Security" → Firearm/Weapon Attack correctly, with no duplication.
+
+## FF.4 Step 4 — Contact placeholders resolved without fabricating numbers
+
+`index.html` contained raw `[to confirm]` placeholders in three places; all resolved without inventing any number:
+
+- **P1 contact list** — "Field Operations Manager — Tanzania" row changed from `To Confirm` / `[to confirm]` to `Role holder pending confirmation` / `See other listed P1 contacts above`, per the brief's explicit instruction for this exact row.
+- **Police — Tanzania table** (1 row affected: Arusha District OCD/OCS) — raw `[to confirm]` replaced with "Pending confirmation — use National Emergency 112 / 999" in both cells.
+- **Police — Kenya table** (4 rows affected: Amboseli, Masai Mara, Loisaba Conservancy, Meru — 7 cells total) — raw `[to confirm]` replaced with "Pending confirmation — use National Emergency 999 / 112 / 911" in each affected cell.
+- No RPC/OCD/OCS number, and no other contact number, was fabricated anywhere — every remaining confirmed number in both tables is untouched.
+- A4-TZ (`contact-card.pdf`) and A4-KE (`contact-card-ke.pdf`) confirmed still separately linked and correctly labelled "Priority Contact Card — TZ" / "— KE" everywhere they appear (checked every `href="forms/contact-card...pdf"` occurrence in `index.html`).
+
+## FF.5 Step 5 — Audit file status
+
+Per Step 1's instruction not to let old unresolved statements in this file outrank the corrected controlled documents, and since this is a continuation of the same live audit trail (not a separate archive), this section (§FF) itself serves as the current record that: the Fire vs Firearm radio-code duplication is CLOSED (§FF.3), the A4-TZ/A4-KE split is CLOSED (§FF.4), the bomb-threat fixed-distance issue is CLOSED (already closed at §EE.4, reconfirmed here), and the Word handbook / live HTML cross-audit for this brief's items has been completed. A separate `FINAL_RELEASE_AUDIT.md` has also been created (§FF.9) summarising current release status in one place, per the brief's suggestion, without discarding this detailed history.
+
+## FF.6 Step 6 — A46 (Food & Water-borne Illness Outbreak) — already a genuine fillable AcroForm
+
+`forms/ckl-foodborne.pdf` was checked directly: it already has 7 real interactive checkbox fields (`ckl-foodborne__chk__001` through `__007`), following the same `[formname]__check__NNN` naming convention as every other ICS checklist — no second convention was introduced. Title confirmed exact: "ICS Activation Checklist — Food & Water-borne Illness Outbreak". Checkbox fill/save/reopen persistence tested directly (set a box to checked, saved, reopened, value confirmed `Yes`). No new form needed to be generated.
+
+## FF.7 Step 7 — Forms QA pass (no content changed indiscriminately)
+
+- A4-TZ / A4-KE confirmed to open the correct country-specific card everywhere linked (see FF.4).
+- A6 title confirmed as "AMREF / Flying Doctors / Arusha Medivac — Required Information" (equivalent in substance to the brief's shorthand "AMREF / Flying Doctors / Medevac Required Information" — same form, same content, no regression).
+- A7 confirmed "Medical Incident Form". A10 confirmed "Bomb Threat Information Sheet". A11 confirmed "Vehicle Incident Report Form" (brief's shorthand omits "Form", consistent with how every other form in this set is named).
+- A18–A29 and A46 all confirmed to follow "ICS Activation Checklist — …" exactly, checked individually.
+- No `href="#"` on any operational PDF download button — every `download-btn` pointing at `href="#"` (16 in `index.html`, 0 in the forms pack) carries a working `onclick="showPage(...)"` in-app navigation handler (this is the "Radio Code List" and breadcrumb-back shortcut pattern, not a broken download link); every genuine PDF download button (169 occurrences) points at a real `forms/*.pdf` path.
+- Cross-checked all 54 distinct `forms/*.pdf` links in `index.html` against both the physical `forms/` directory and the `id=` anchors in `elewana-forms-pack.html`: zero missing files on disk, zero missing forms-pack sections.
+
+## FF.8 Step 8 — Clinical and medevac content: not touched, status recorded as-is
+
+No changes made to A42 clinical content, tourniquet/IV-IO/BP wording, AMREF coverage statements, mobilisation cut-offs, or night-airstrip instructions this pass — none of this was in scope of the supplied brief's steps, and no medical-adviser/WFA-provider/medevac-provider verification was obtained or claimed this session. Status remains: **pending verification**, not silently assumed. The 16:00 same-day-mobilisation cut-off and the A30 snakebite compression-bandage protocol were re-confirmed present and unchanged (see §EE.10 and the fresh check in FF.9).
+
+## FF.9 Step 9 & 10 — Repository-wide search and regression check
+
+- Full-repository string sweep across `index.html`, `elewana-forms-pack.html`, and every `forms/*.pdf` text layer for: "50 m" / "50m" / "50 metre" / "50 meter", "Section 5.1.2", "[Insert Contact]", "[to confirm]", "at least annually" — all zero except the two non-operational base64-logo "50m" substring matches noted in FF.2. "Code Red" confirmed scoped to Fire only (FF.3).
+- Internal navigation regression check: extracted all 21 `showPage('page-...')` targets and confirmed each resolves to a matching `tpl-...` `<template>` element (`page-landing` handled as the special-cased default) — zero broken internal links.
+- Playwright smoke test (headless Chromium, local `file://` load): zero real console/page errors (the only console entry was an unrelated blocked-network 403 from an external resource request, not a script error); scenario pages for Death, Bomb Threat, Water & Aquatic Safety (now titled "Non-Fatal Drowning / Post-Submersion Observation & Man-Overboard" per §EE), and Firearm & Weapon Attacks all rendered their correct titles on navigation; mobile viewport (375px) showed no horizontal overflow (`scrollWidth` matched `innerWidth`).
+- Not performed this pass: a live commit/push (sandbox still has no GitHub push credentials, per standing constraint) and a full manual click-through of every one of the 54 PDF download buttons in a real browser — the automated cross-reference in FF.7 covers file existence and forms-pack linkage, which is the practical equivalent available in this environment.
+
+## FF.10 Files changed this pass
+
+- `index.html` — three sets of `[to confirm]` placeholder replacements (P1 contact row, Police — Tanzania table, Police — Kenya table). No other file needed changes this pass — `elewana-forms-pack.html`, all `forms/*.pdf`, and `CHANGE_LOG_AND_AUDIT.md` (other than this entry and the new `FINAL_RELEASE_AUDIT.md`) were checked and confirmed already correct, not touched.
+
+## FF.11 Status
+
+Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint). Commit SHA cannot be recorded until Winnie completes the manual upload and commits on GitHub's side; this should be added to `FINAL_RELEASE_AUDIT.md` once available.
