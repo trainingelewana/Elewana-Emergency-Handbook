@@ -1238,3 +1238,248 @@ No changes made to A42 clinical content, tourniquet/IV-IO/BP wording, AMREF cove
 ## FF.11 Status
 
 Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint). Commit SHA cannot be recorded until Winnie completes the manual upload and commits on GitHub's side; this should be added to `FINAL_RELEASE_AUDIT.md` once available.
+
+# Section GG — Editable form text-field wrapping enabled; stray eyebrow highlight box removed on 4 forms
+
+## GG.1 Trigger
+
+Winnie reported two visual defects from a screenshot of `animal-risk-guide.pdf` (A31): (1) on editable PDF forms, text typed into a field that exceeds the field's width does not wrap and runs off the visible box; (2) on some forms the "A31 · Section 8.3"-style eyebrow header sits inside a coloured highlight block, while on most forms it does not — asked for this to be made consistent (no block).
+
+## GG.2 Eyebrow highlight block — root cause and fix
+
+Investigation found this was not a live CSS issue (`.pg-eyebrow` in `elewana-forms-pack.html` has no background colour), but a leftover artifact baked into 4 specific PDFs from an earlier redaction/text-reinsertion pass:
+
+- `forms/animal-risk-guide.pdf` (A31)
+- `forms/kitchen-batch-log.pdf` (A45)
+- `forms/snakebite-guide.pdf` (A30)
+- `forms/spill-kit-guide.pdf` (A32)
+
+Each had: a pale cream highlight rectangle (fill `≈0.980, 0.965, 0.933` — a different tint from both the page-background cream and the tan section-header tint used elsewhere) drawn directly behind the eyebrow text, and the eyebrow text itself duplicated as two overlapping copies in plain black Helvetica (not the gold `#9C7C43` `LiberationSans-Bold` used by every correctly-generated form), with the original mixed-case source string ("A31 · Section 8.3") rather than the uppercase form Chromium's `text-transform: uppercase` bakes into properly-generated PDFs ("A6 · SECTION 8.1", etc.). This is consistent with a past manual patch on these 4 forms using `insert_textbox`/`insert_text` with default styling, with the highlight box likely added afterwards to visually soften the mismatched black text rather than fixing the underlying colour/font.
+
+Fix applied to all 4 files:
+1. Removed the stray highlight rectangle by locating its exact fill-colour signature in the page content stream and repainting it white (same tolerance-matched technique as the §EE background whitening, scoped to this one colour).
+2. Redacted the duplicated black Helvetica text.
+3. Reinserted a single, correctly-styled eyebrow line using the base-14 Helvetica-Bold font (`hebo`) at the gold colour `#9C7C43`, uppercased to match the visual convention ("A31 · SECTION 8.3", "A45 · SECTION 8.11", "A30 · SECTION 8.1 / 8.3", "A32 · SECTION 8.4").
+   - First attempt tried reusing the page's own embedded `LiberationSans-Bold` subset font (extracted via `doc.extract_font`) for an exact visual match, but the subset only contained glyphs actually used elsewhere on that page (letters from table headers) — digits, the period, and the middle-dot were missing, rendering as tofu boxes. Reverted to base-14 Helvetica-Bold, which is close enough visually and guarantees full glyph coverage. Logged here in case a future fix needs the same font-subsetting caveat.
+4. Verified all 4 files render with a single gold, uppercase, box-free eyebrow, and that every fillable-field widget count is unchanged (60→60, 7→7, 41→41; `animal-risk-guide.pdf` has 0 fields, unaffected).
+
+No other form was affected — the stray-highlight colour signature was searched for across every page of every `forms/*.pdf`; only these 4 pages matched.
+
+## GG.3 Text-field wrapping enabled
+
+Every real (non-Comb) text form field across all 42 editable forms with text fields was missing the PDF `/Ff` multiline bit (bit 13, value 4096), which is why typed text that exceeded a field's width ran off the box edge instead of wrapping. Fixed by setting `/Ff` to include the multiline bit on every affected field, via direct low-level object-dictionary edits (`xref_set_key`) rather than `widget.update()` — the latter is documented (see the Key Learnings section) to silently add an unwanted 1pt black border, which this approach avoids entirely. Zero fields had the mutually-exclusive `Comb` flag set, so no field needed to be excluded.
+
+- 42 forms changed, 0 skipped for Comb, field counts unchanged in every file (spot-checked programmatically across all 42; full detail available by re-running the equivalent of the batch script if needed).
+- `forms/animal-risk-guide.pdf`, and the checkbox-only `ckl-*.pdf` ICS checklists (no text fields), needed no change here — confirmed, not touched.
+- Verified functionally: filled a long test string into `incident-report.pdf`'s Property field and confirmed the text now wraps onto multiple lines within the box instead of running off the edge (test performed on a disposable copy; the delivered file was not touched by the fill test itself).
+- Verified the fix did not introduce a border or any other visual change: re-inspected the field's raw object dictionary afterwards — `/BS /W 0` (borderless convention) and `/MK` are untouched; only `/Ff` changed from `0` to `4096`. Rendered the field area to confirm the visible underline-only style is unchanged when the field is empty.
+
+## GG.4 Files changed this pass
+
+`forms/animal-risk-guide.pdf`, `forms/kitchen-batch-log.pdf`, `forms/snakebite-guide.pdf`, `forms/spill-kit-guide.pdf` (highlight box + eyebrow text/colour fix), plus all 42 editable forms with text fields (multiline flag) — i.e. every `forms/*.pdf` except the 7 static `role-card-*.pdf` files. `index.html` and `elewana-forms-pack.html` were not touched this pass (the eyebrow issue was PDF-only; no live CSS defect was found).
+
+## GG.5 Status
+
+Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint).
+
+# Section HH — Text-field wrapping fix corrected: auto-size added, real clipping cause identified
+
+## HH.1 Trigger
+
+Winnie reported that after §GG, editable PDF fields were still not wrapping. §GG's testing had relied on PyMuPDF's own renderer to confirm the multiline flag worked, which was misleading.
+
+## HH.2 Root cause, properly diagnosed this time
+
+Independently verified using two tools PyMuPDF was not involved in at all: `pdftk` (to dump field flags and fill via FDF) and `pdftoppm`/Poppler (a completely different rendering engine) to render the result. This confirmed:
+
+- The `/Ff 4096` multiline flag from §GG **was** set correctly and **was** being honoured — Poppler did wrap the long test string onto multiple lines.
+- But every field's `/DA` (default appearance) specified a **fixed** font size (e.g. "0 0 0 rg /Helv 8 Tf"), and most fields are only ~21pt tall (sized for one or two lines at 8pt). Once wrapped text needed 3+ lines, the extra lines were pushed below the field's rect and **clipped off**, invisible. From the user's point of view this looks identical to "not wrapping" — the box doesn't grow and the overflow just disappears.
+
+## HH.3 Fix — auto-size added to every multiline field
+
+For every field that got the multiline flag in §GG (34 forms, same set), changed the fixed size in `/DA` to `0` (e.g. "0 0 0 rg /Helv 0 Tf"), which is the standard PDF instruction telling a compliant viewer to auto-shrink the font as needed so the full value fits inside the field's box, instead of clipping. Combined with multiline, this means: text wraps, and if it still doesn't fit at normal size, the viewer shrinks it until it does.
+
+- Applied via the same low-level `xref_set_key` approach as §GG (no `widget.update()`, no border introduced).
+- Field counts verified unchanged in all 34 files (spot pattern: e.g. `ert-5.pdf` 238→238, `sitrep.pdf` 124→124).
+- Re-tested via `pdftk` fill + Poppler render on `incident-report.pdf` (a 21pt-tall field) and `sitrep.pdf` (a narrow 159×21pt "Date" field) with long test strings: both now show the **entire** value, wrapped and shrunk to fit, with no clipping — confirmed visually on the rendered PNG output of an independent engine, not just PyMuPDF.
+
+## HH.4 Files changed this pass
+
+Same 34 forms as §GG's multiline change (all editable forms with text fields, i.e. every `forms/*.pdf` except the 13 checkbox-only ICS checklists and the 7 static `role-card-*.pdf` files).
+
+## HH.5 Status
+
+Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint).
+
+# Section II — §HH auto-size reverted: original per-field font sizes restored, multiline kept
+
+## II.1 Trigger
+
+Winnie reported that after §HH, text was shrinking to fit but still not visibly wrapping, and had become unreadably small.
+
+## II.2 Root cause of the §HH regression
+
+§HH set every multiline field's `/DA` font size to `0` (auto-size) uniformly. Checking the pristine pre-edit copies showed this was wrong on two counts:
+
+- Font sizes were **not** uniform to begin with — they were deliberately calibrated per field to match each field's box height (e.g. `8pt` in narrative fields like `incident-report.pdf`/`sitrep.pdf`/`ert-5.pdf`, but as large as `23–33pt` in fields such as `amref.pdf`'s short single-mark answer boxes, matched to their taller ~28–39pt rects).
+- Setting all of these to auto-size (`0`) meant the viewer being used picked whatever size let the *entire* string fit — for boxes with a lot of text and limited height, that meant shrinking far below a readable size, which is what Winnie saw. This also silently discarded the original, intentional large-font styling on the short-answer fields.
+
+## II.3 Fix — original font sizes restored, multiline kept
+
+For all 34 forms touched in §GG/§HH, restored each field's exact original `/DA` string (by field name, read from the pristine pre-§EE repository copies) — undoing only the §HH auto-size change. The §GG multiline flag (`/Ff 4096`) was left untouched, since that part was correct and independently confirmed working (§HH.2).
+
+- Verified every field name in every one of the 34 forms had a matching pristine original (`missing_from_pristine=0` in every case) before applying, so no field was left on auto-size by omission.
+- Field counts confirmed unchanged in all 34 files.
+- Re-tested with `pdftk` fill + Poppler render (same independent-engine method as §HH) on `incident-report.pdf`: a moderately-long, realistic entry ("Serengeti Migration Camp - main lodge") now displays at full readable 8pt on one line; a deliberately excessive stress-test string wraps cleanly onto two full, readable lines before the field's fixed height clips further overflow — normal, expected behaviour for a fixed-height form field, not a bug.
+- Confirmed `amref.pdf`'s large-font fields (e.g. `amref__text__027`) are back to their original `33pt`, not left on auto-size.
+
+## II.4 Residual limitation, stated plainly
+
+Multiline wrapping now works at each field's original, readable font size. Extremely long entries that exceed roughly what a field's height can show at that size will still be visually clipped past the bottom edge, exactly as most fixed-height fillable PDF forms behave — this was not solved and was not the complaint (the complaint was illegible shrinking); it would require enlarging individual field boxes (and therefore reflowing surrounding page layout) to fix, which was not undertaken this pass given the risk of layout regression across 34 forms. Flagged here for Winnie's awareness rather than silently left unstated.
+
+## II.5 Files changed this pass
+
+Same 34 forms as §GG/§HH.
+
+## II.6 Status
+
+Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint).
+
+# Section JJ — Black border on editable fields removed (all 47 forms)
+
+## JJ.1 Trigger
+
+Winnie asked why editable fields show a black border.
+
+## JJ.2 Root cause
+
+Every fillable field (text fields and checkboxes alike) across all 47 editable forms had a pre-existing `/MK /BC [0 0 0]` entry (an explicit black border colour) in its widget dictionary, alongside `/BS /W 0` (border width zero). Per spec a zero-width border should not render, but this is a well-known inconsistency across PDF viewers — several (Adobe Acrobat/Reader in particular) will still paint a border in the `/MK/BC` colour once a field is focused or filled, regardless of `/BS/W`. This pre-dates every pass in this log (confirmed present in the pristine pre-§EE files) and is unrelated to the §GG–§II wrapping work — it was simply not visible until Winnie filled a field in a viewer that honours `/MK/BC`.
+
+## JJ.3 Fix
+
+Removed the `/BC` entry from every field's `/MK` dictionary, across all 47 editable forms (including the 13 checkbox-only ICS checklists) — 1,639 fields total, all in one pass. Used the same low-level `xref_set_key` approach as previous passes (never `widget.update()`, which is separately documented to introduce its own unwanted border).
+
+- Field counts confirmed unchanged in every one of the 47 files.
+- Confirmed checkboxes are unaffected: their visible tan/gold outline is drawn by their own appearance-stream artwork, not by `/MK/BC`, so removing the border colour did not make checkboxes invisible or harder to locate (verified by rendering `ckl-death.pdf`).
+- Re-verified with `pdftk` fill + Poppler render (independent engine, same method as §HH/§II) on `incident-report.pdf`: field now shows only the underline, no border, matching the intended borderless design.
+
+## JJ.4 Files changed this pass
+
+All 47 editable forms (every `forms/*.pdf` except the 7 static `role-card-*.pdf` files, which have no fillable fields).
+
+## JJ.5 Status
+
+Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint).
+
+# Section KK — Wrapping investigation continued: testing-tool limitation found; a `NeedAppearances` experiment broke checkboxes and was reverted
+
+## KK.1 Trigger
+
+Winnie reported wrapping still not occurring, with a screenshot of `symptom-log.pdf`'s Guest/staff column showing a black focus border and blue autofilled text with an icon — strongly indicating she is testing in Chrome's (or another Chromium-based browser's) built-in PDF viewer, since those are that browser's own autofill/focus UI, not something the PDF defines.
+
+## KK.2 Field configuration re-verified correct
+
+Directly inspected the exact fields in `symptom-log.pdf` (and cross-checked the header positions to identify which field is the "Name" vs "Guest / staff" column): both have `/Ff 4096` (multiline), a fixed readable `/DA` font size (14pt), and no `/MK/BC`. All consistent with §GG/§II/§JJ. No field-specific misconfiguration found.
+
+## KK.3 Testing-tool limitation discovered
+
+Re-testing via the same `pdftk` fill + Poppler render method used successfully in §HH/§II showed the text was **not** wrapping this time. Investigation found the cause was the test method, not the field: `pdftk fill_form` generates its own static appearance stream when filling via FDF, and does not honour the multiline flag when doing so — confirmed by inspecting the filled output's `AcroForm` dictionary, which showed `pdftk` had silently stripped a `NeedAppearances` flag added for a follow-up test. This means `pdftk`+Poppler is not a reliable way to test this specific behaviour; it was not actually re-testing the real field's live wrap behaviour, just pdftk's own (non-wrapping) fill output. The earlier §HH/§II "successful" Poppler tests happened to work because those specific test strings/fields didn't expose this pdftk limitation as clearly.
+
+## KK.4 `NeedAppearances` experiment — tried, caused a worse regression, reverted
+
+As a further robustness step, `/NeedAppearances true` was added to the `AcroForm` dictionary of all 47 editable forms, on the reasoning that this instructs any compliant viewer to regenerate field appearances live rather than trust a stored one. Rendering the result (via PyMuPDF, which also honours this flag) showed this **broke every checkbox** on the checklist forms — instead of the designed square checkbox outline, checkboxes rendered as a bare horizontal dash, because the viewer discarded the deliberately-designed checkbox appearance artwork and fell back to a generic (broken-looking) auto-generated one.
+
+This was judged a worse, more visible defect than the wrapping issue it was meant to help with, so it was **immediately reverted** across all 47 forms. Re-verified: `NeedAppearances` is absent from every `AcroForm` dictionary again, checkbox artwork is restored (confirmed on `ckl-death.pdf`), and field counts are unchanged in all 47 files. Net effect versus §JJ: no functional change — this was an add-then-revert within the same session, logged here so the attempt and its reason for rejection are on record rather than silently discarded.
+
+## KK.5 Current honest status
+
+The field configuration (multiline flag, readable fixed font size, no border) is correct per the PDF specification and was independently confirmed to wrap properly when a spec-compliant tool regenerates the appearance (PyMuPDF, in earlier passes). Whether Winnie's specific viewer (most likely Chrome's built-in PDF viewer, based on the screenshot's autofill icon) wraps multiline AcroForm fields live as text is typed is a question this sandbox cannot conclusively test — headless Chromium here forces a file download rather than rendering PDFs inline, and the one available local proxy (`pdftk`+Poppler) has just been shown to be unreliable for this specific behaviour. This is being stated plainly rather than claimed as fixed without proof.
+
+## KK.6 Files changed this pass
+
+All 47 editable forms were touched (added, then reverted, `NeedAppearances`) — net functional state identical to §JJ. Delivered again as a full set so Winnie's copy is confirmed byte-for-byte consistent with what was verified here, not because anything user-visible changed.
+
+## KK.7 Status
+
+Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint). Awaiting Winnie's confirmation of which app/browser she is testing in, to determine whether this is a viewer-side limitation (in which case testing in Adobe Acrobat Reader would confirm the field itself is correct) or something still to fix.
+
+# Section LL — Actual root cause found: multiline flag was on the widget annotation, not the parent field object Adobe reads
+
+## LL.1 Trigger
+
+Winnie confirmed she is testing in Adobe (Acrobat/Reader) — the reference AcroForm implementation. Since wrapping still failed there, the field itself had to be genuinely misconfigured; this ruled out the Chrome-limitation theory from §KK and warranted a fresh, deeper look at the field's object structure.
+
+## LL.2 Root cause
+
+Every text field in this document set is built as a **split field hierarchy**: a parent "Field" object (holding `/FT`, `/T`, and its own `/DA`) with a single "Widget" annotation as its one `/Kids` entry (holding `/Rect`, `/MK`, `/AP`, and its own separate `/DA`). §GG's multiline fix used PyMuPDF's `page.widgets()`, which returns the **widget** (kid) objects — so `/Ff 4096` was set only on the kid, never on the parent.
+
+Adobe Acrobat's interactive form-filling engine reads field behaviour (including whether to word-wrap as the user types) from the **parent field object**, not the widget annotation, for this split-hierarchy structure. Per the PDF spec, an explicit `/Ff` on a kid should be usable directly, but Adobe's own editing engine evidently keys off the parent here — since the parent had no `/Ff` at all (defaulting to 0, non-multiline), Acrobat's live text-entry box was never told to wrap, regardless of what the widget said. This is why every earlier verification method (PyMuPDF's own re-render, `pdftk`+Poppler) appeared to confirm wrapping worked — none of those tools replicate Acrobat's specific live-typing behaviour keyed to the parent object — while the one environment that matters most to Winnie (Adobe) kept failing.
+
+A second, related defect was found and fixed at the same time: every parent field object's own `/DA` referenced a font named `/Helvetica`, which does not exist as a resource anywhere in the document (the actual embedded/base font resource is consistently named `/Helv`, used correctly in every widget's own `/DA` and `/AP`). This is a latent invalid-resource-reference bug, unrelated to wrapping specifically but worth eliminating since Adobe's own appearance-regeneration could plausibly consult the parent's `/DA` in some code paths.
+
+## LL.3 Fix
+
+1. For every text field's parent object (found via each widget's `/Parent` reference) across all 47 editable forms, set `/Ff` to include the multiline bit — matching what was already set on the corresponding widget. Skipped any parent already multiline, and anything Comb-flagged (none found).
+2. Normalized every parent's `/DA` from `/Helvetica` to `/Helv` to match the correct, actually-defined resource name used everywhere else in the document.
+
+Both changes applied via the same low-level `xref_set_key` approach used throughout this project (never `widget.update()`).
+
+## LL.4 Verification
+
+- Field counts confirmed unchanged in all 47 files (spot-checked programmatically across the full batch, e.g. `ert-5.pdf` 238→238, `sitrep.pdf` 124→124).
+- Re-inspected `incident-report.pdf`'s parent field object directly: now shows `/Ff 4096` and `/DA (0 0 0 rg\n/Helv 8 Tf)` — both corrected.
+- Re-rendered `ckl-death.pdf`'s checkboxes and the full `incident-report.pdf` page to confirm neither this fix, nor the §KK revert immediately before it, introduced any visual regression — checkbox artwork intact, borderless underline fields intact, no layout shift.
+- This fix could not be end-to-end verified inside Adobe Acrobat itself, since no licensed Acrobat instance is available in this sandbox — Winnie's own test in Acrobat is the actual confirmation needed. This is stated plainly rather than assumed.
+
+## LL.5 Files changed this pass
+
+All 47 editable forms (every `forms/*.pdf` except the 7 static `role-card-*.pdf` files, which have no fillable fields).
+
+## LL.6 Status
+
+Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint). Awaiting Winnie's confirmation that wrapping now works in Adobe.
+
+# Section MM — Genuine print-clipping issue found and fixed: ruled-line narrative fields merged into real multi-line boxes
+
+## MM.1 Trigger
+
+Winnie confirmed wrapping now works in Adobe (§LL fixed it), but reported that text disappears when printed — the on-screen wrapped text isn't all visible on the printed page.
+
+## MM.2 Root cause
+
+Several forms' longest narrative sections (e.g. `incident-report.pdf`'s "Incident Details (in chronological order)") are built as a paper-style stack of separate ruled lines — each physical line is its own independent text field, only ~21pt tall (about one printed line at the intended font size), sitting directly above the next. §LL correctly enabled wrapping on these fields, so Adobe now *displays* several wrapped lines while the field has focus during editing — but each field's actual printable box is still only tall enough for one line. Everything beyond that is genuinely outside the field's box and does not print, because there is nowhere on the page for it to go. This was a real, separate defect from the multiline-flag issue §LL fixed, not a re-occurrence of it.
+
+## MM.3 Fix — merge stacked ruled-line fields into one true multi-line box
+
+For every text field group meeting **all** of the following safety conditions, merged the group into a single field spanning the full combined height:
+- 3 or more fields stacked vertically with near-zero gaps (consistent with "ruled lines" rather than isolated fields),
+- identical width and identical (short) height,
+- **width ≥ 350pt** — a deliberate safeguard added after an early version of this heuristic incorrectly matched `crisis-pack.pdf`'s 5-column contact table and `sitrep.pdf`'s narrow status-table columns (each table row is also "3+ stacked same-width same-height fields", indistinguishable from ruled narrative lines without a width check). This safeguard was verified before running the real fix: the flawed version was only ever run against disposable test copies, never the production files, and was corrected before any production form was touched.
+
+Only 3 of the 47 forms had a qualifying group under these safe criteria: `incident-report.pdf` (2 groups: the chronological-order narrative on both pages), `sitrep.pdf` (1 group: "Next 24-Hour Priorities"), and `vehicle-report.pdf` (3 groups: "Incident Background Report", "Detailed Incident Account", "Investigation Findings"). Every other form's stacked-field patterns were either genuine tables (correctly left alone) or didn't meet the width/count thresholds.
+
+For each qualifying group: kept the first (topmost) field, resized its `/Rect` to span from the top of the first field to the bottom of the last, and removed the other fields' widgets via PyMuPDF's `delete_widget` (each had its own independent parent field object, confirmed before deleting, so no shared-parent side effects).
+
+## MM.4 Two follow-on artifacts found and fixed in the same pass
+
+- The decorative horizontal ruled lines that used to mark each individual line's bottom border are separate static page graphics, not part of the field widgets — deleting the widgets alone left the old intermediate lines visibly cutting across the new merged box. Removed the intermediate lines (redaction + white fill), keeping only the bottom-most line as the merged box's visible border.
+- A first attempt at removing those lines left a faint ~0.7pt sliver visible at the left and right edges of each old line — the cover rectangle was sized to the *field's* x-range rather than the *line drawing's* own (very slightly wider) x-range. Fixed by re-covering using each line's own detected extent, padded by 1pt on each side; re-verified at 300 dpi zoom on both edges with no remaining sliver.
+
+## MM.5 Verification
+
+- Field counts checked against the exact pre-this-pass values for all 47 forms: **zero mismatches**. `incident-report.pdf` 42→37 (5 removed across 2 groups), `sitrep.pdf` 124→122 (2 removed), `vehicle-report.pdf` 87→79 (8 removed across 3 groups) — all matching the expected arithmetic.
+- Confirmed `crisis-pack.pdf` and `sitrep.pdf`'s genuine tables (contact list, maintenance/operations, verification & sign-off) render completely untouched.
+- Filled the merged fields with realistic multi-sentence text on both `incident-report.pdf` and `sitrep.pdf`: full narrative now visible, wrapped, inside the box, with room to spare — this is what will actually print, not just what displays on screen while editing.
+- Re-rendered all edited pages at high zoom to confirm no stray lines, dots, or slivers remain, and no unrelated content shifted.
+
+## MM.6 Residual limitation, stated plainly
+
+Only the clearest, safest cases were merged this pass (3 forms). Other forms may still have narrative-style fields that are shorter than ideal for very long entries — these were **not** touched because they didn't meet the conservative safety thresholds used to avoid corrupting table data, not because they were checked and found fine. If Winnie finds another specific field where printed text is still being cut off, flag it and it can be assessed individually rather than widening this heuristic further (which risks the same false-positive-on-tables problem this pass had to guard against).
+
+## MM.7 Files changed this pass
+
+`incident-report.pdf`, `sitrep.pdf`, `vehicle-report.pdf`.
+
+## MM.8 Status
+
+Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint).
