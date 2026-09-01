@@ -1483,3 +1483,34 @@ Only the clearest, safest cases were merged this pass (3 forms). Other forms may
 ## MM.8 Status
 
 Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint).
+
+# Section NN — Jarryd King phone number updated
+
+## NN.1 Trigger
+
+Winnie requested Jarryd King's telephone number be updated to +254 768 451663 across `index.html`, `elewana-forms-pack.html`, and the editable PDF forms, wherever it appears.
+
+## NN.2 Scope check
+
+Searched all three locations for "Jarryd King" and for the old number (+254 702 589 019):
+
+- `index.html` — 2 occurrences, both in the Emergency Contacts P1 list (one under the Tanzania table, one under the Kenya table) — Jarryd King (Director of Hospitality and Operations) is listed as a P1 contact in both country groupings.
+- `elewana-forms-pack.html` — 0 occurrences of either his name or the old number.
+- All `forms/*.pdf` — 0 occurrences of either his name or the old number.
+
+## NN.3 Fix
+
+Replaced both occurrences of `+254 702 589 019` with `+254 768 451663` in `index.html`. Number used exactly as given by Winnie (not reformatted to match the surrounding 3-3-3 digit grouping style, to avoid introducing a transcription error).
+
+## NN.4 Verification
+
+- Confirmed zero remaining occurrences of the old number anywhere in `index.html`, and exactly 2 occurrences of the new number, both still correctly attached to the "Jarryd King / Director of Hospitality and Operations / P1" row.
+- Playwright smoke test: loaded `index.html`, navigated to the Emergency Contacts page, confirmed the new number appears twice and the old number appears nowhere, with zero console errors.
+
+## NN.5 Files changed this pass
+
+`index.html` only — `elewana-forms-pack.html` and all PDF forms did not contain this number and were correctly left untouched.
+
+## NN.6 Status
+
+Not yet pushed to GitHub — delivered to Winnie as a changed-files-only zip via `present_files` (sandbox has no push credentials, per standing constraint).
